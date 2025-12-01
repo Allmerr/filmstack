@@ -30,7 +30,7 @@
         <p className="text-lg md:text-xl text-textMuted mb-8 max-w-2xl mx-auto">
           The social network for film lovers. Tell your friends what’s good. 
         </p>
-        <button class="bg-primary hover:bg-primaryHover text-white font-bold py-3 px-8 rounded text-lg transition-transform transform hover:scale-105 shadow-lg shadow-green-900/50">
+        <button class="bg-primary hover:bg-primaryHover text-white font-bold py-3 px-8 rounded text-lg transition-transform transform hover:scale-105 shadow-lg shadow-green-900/50 mt-5">
           Get Started — It's Free!
         </button>
       </div>
@@ -62,7 +62,7 @@
         <div id="movie-grid" class="grid grid-cols-3 sm:grid-cols-4 md:grid-cols-6 gap-3 md:gap-4">
           <!-- Skeletons (Loading State) -->
           @foreach ($data as $key => $d)
-          <div class="movie-card group relative flex-shrink-0 cursor-pointer w-full">
+          <a href="/film/{{ $d['id'] ?? $key }}" class="movie-card group relative flex-shrink-0 cursor-pointer w-full block no-underline" aria-label="{{ $d['primaryTitle'] ?? 'View movie' }}">
             <div class="relative w-full pb-[150%] overflow-hidden rounded-md shadow-lg border border-white/10 transition-all duration-300 hover:ring-2 hover:ring-primary hover:shadow-primary/20">
               
               <img 
@@ -89,7 +89,7 @@
               <h3 class="text-white font-bold text-sm truncate">{{ $d['primaryTitle'] ?? '' }}</h3>
               <p class="text-textMuted text-xs">{{ $d['startYear'] ?? '' }}</p>
             </div>
-          </div>    
+          </a>    
           @endforeach
         </div>
 

@@ -3,7 +3,7 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>CineLog - Track films you've watched.</title>
+    <title>Filmstack - Track films you've watched.</title>
     <meta name="description" content="The social network for film lovers." />
     <script src="https://cdn.tailwindcss.com"></script>
     <script>

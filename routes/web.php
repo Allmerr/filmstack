@@ -19,6 +19,14 @@ Route::get('/', function () {
     ]);
 })->name('welcome');
 
+Route::get('/film/{tittleId}', function ($tittleId) {
+    $response = Http::get("https://api.imdbapi.dev/titles/{$tittleId}");
+    return view('film', [
+        'data' => $response->json()
+    ]);
+})->name('film');
+
+
 Route::get('/login', [LoginController::class, 'index'])->name('login');
 Route::post('/login', [LoginController::class, 'store'])->name('login.store');
 Route::get('/register', [RegisterController::class, 'index'])->name('register');
