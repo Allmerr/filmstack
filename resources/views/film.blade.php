@@ -136,7 +136,7 @@
             </div>
           </div> -->
 
-                            <div class="mt-12 max-w-3xl">
+              <div class="mt-12 max-w-3xl">
                 <div class="flex items-center justify-between mb-6">
                   <h3 class="text-white font-bold text-xl">Reviews <span class="text-textMuted text-sm font-normal ml-1">(${comments.length})</span></h3>
                   <div class="text-xs font-bold text-primary uppercase tracking-widest cursor-pointer hover:underline">Read All</div>
@@ -172,7 +172,7 @@
                 <div id="comment-list" class="space-y-4">
                    ${listHTML}
                 </div>
-            </div>
+              </div>
 
                 <p class="text-textMuted">No reviews available.</p>
             </div>
