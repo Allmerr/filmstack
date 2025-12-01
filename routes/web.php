@@ -21,11 +21,11 @@ Route::get('/', function () {
 
 Route::get('/film/{tittleId}', function ($tittleId) {
     $response = Http::get("https://api.imdbapi.dev/titles/{$tittleId}");
+    // dd($response->json());
     return view('film', [
         'data' => $response->json()
     ]);
 })->name('film');
-
 
 Route::get('/login', [LoginController::class, 'index'])->name('login');
 Route::post('/login', [LoginController::class, 'store'])->name('login.store');

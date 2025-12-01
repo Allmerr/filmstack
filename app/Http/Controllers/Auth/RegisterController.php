@@ -12,6 +12,7 @@ class RegisterController extends Controller
     }
 
     public function store(Request $request){
+        // dd($request);
         if($request->password !== $request->password_confirmation){
         return back()->withErrors([
             'password' => 'The password confirmation does not match.',
