@@ -110,71 +110,54 @@
                </div>
             </div>
 <!-- 
-            <div class="mt-16 border-t border-gray-800">
-                <div class="flex gap-8 mb-6 mt-8 border-b border-gray-800 text-sm font-bold uppercase tracking-widest">
-                    <button class="pb-3 border-b-2 border-primary text-white">Reviews</button>
-                    <button class="pb-3 border-b-2 border-transparent text-textMuted hover:text-white transition-colors">Ratings</button>
-                    <button class="pb-3 border-b-2 border-transparent text-textMuted hover:text-white transition-colors">More Like This</button>
-                </div>
-                 <div class="flex gap-4 p-4 rounded-lg bg-[#1f252b] border border-white/5 animate-[fadeIn_0.3s_ease-out]">
-            <div class="flex-shrink-0">
-               <img src="${c.avatar || 'https://i.pravatar.cc/150?img=12'}" alt="${c.user}" class="w-10 h-10 rounded-full border border-gray-600">
-            </div>
-            <div class="flex-grow">
-               <div class="flex justify-between items-center mb-1">
-                  <span class="text-white font-bold text-sm">${c.user}</span>
-                  <span class="text-textMuted text-xs">${c.date}</span>
-               </div>
-               <div class="flex mb-2">
-                 ${[1,2,3,4,5].map(i => `
-                    <svg class="w-3 h-3 ${i <= c.rating ? 'text-primary fill-current' : 'text-gray-600'}" viewBox="0 0 24 24">
-                       <path d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z"/>
-                    </svg>
-                 `).join('')}
-               </div>
-               <p class="text-gray-300 text-sm leading-relaxed">${c.text}</p>
-            </div>
-          </div> -->
+          -->
 
-              <div class="mt-12 max-w-3xl">
+              <div class="mt-12">
                 <div class="flex items-center justify-between mb-6">
-                  <h3 class="text-white font-bold text-xl">Reviews <span class="text-textMuted text-sm font-normal ml-1">(${comments.length})</span></h3>
+                  <h3 class="text-white font-bold text-xl">Reviews</h3>
                   <div class="text-xs font-bold text-primary uppercase tracking-widest cursor-pointer hover:underline">Read All</div>
                 </div>
 
                 <!-- Comment Input -->
+                 <form action="{{ route('reviews.store') }}" method="POST">
+                  @csrf
+                  <input type="hidden" name="id_films" value="{{ $data['id'] }}">
                 <div class="bg-[#1f252b] p-6 rounded-lg border border-white/5 mb-8 shadow-inner">
-                   <div class="flex gap-4">
-                      <div class="w-10 h-10 rounded-full bg-primary flex items-center justify-center text-dark font-bold text-sm flex-shrink-0">
-                        Me
-                      </div>
-                      <div class="flex-grow">
-                        <textarea id="comment-input" class="w-full bg-[#14181c] text-white p-3 rounded border border-gray-700 focus:border-primary focus:outline-none transition-colors placeholder-textMuted text-sm" rows="3" placeholder="Add a review..."></textarea>
-                        
-                        <div class="flex justify-between items-center mt-3">
-                            <div class="flex items-center gap-2">
-                               <span class="text-xs text-textMuted font-bold uppercase mr-2">Your Rating:</span>
-                               <div class="flex cursor-pointer group" id="new-comment-rating">
-                                  ${[1,2,3,4,5].map(i => `
-                                    <svg onclick="setRating(${i})" data-val="${i}" class="star-input w-5 h-5 text-gray-600 hover:text-primary transition-colors" viewBox="0 0 24 24" fill="currentColor">
-                                       <path d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z"/>
-                                    </svg>
-                                  `).join('')}
-                               </div>
-                            </div>
-                            <button onclick="postComment('${movieId}')" class="bg-primary hover:bg-white text-darker font-bold py-2 px-6 rounded text-sm transition-all transform hover:scale-105">Post</button>
-                        </div>
-                      </div>
-                   </div>
+                     <textarea id="comment-input" name="review" class="w-full bg-[#14181c] text-white p-3 rounded border border-gray-700 focus:border-primary focus:outline-none transition-colors placeholder-textMuted text-sm" rows="3" placeholder="Add a review..."></textarea>
+                     <button type="submit" class="bg-primary hover:bg-white text-darker font-bold py-2 px-6 rounded text-sm transition-all transform hover:scale-105">Post</button>
                 </div>
+                  </form>
 
                 <!-- List -->
-                <div id="comment-list" class="space-y-4">
-                   ${listHTML}
-                </div>
+                  <div class="mt-16 border-t border-gray-800">
+                     <div class="flex gap-8 mb-6 mt-8 border-b border-gray-800 text-sm font-bold uppercase tracking-widest">
+                        <button class="pb-3 border-b-2 border-primary text-white">Reviews</button>
+                        <button class="pb-3 border-b-2 border-transparent text-textMuted hover:text-white transition-colors">Ratings</button>
+                        <button class="pb-3 border-b-2 border-transparent text-textMuted hover:text-white transition-colors">More Like This</button>
+                     </div>
+                     @foreach ($reviews as $review)
+                     <div class="flex gap-4 p-4 rounded-lg bg-[#1f252b] border border-white/5 animate-[fadeIn_0.3s_ease-out]">
+                        <div class="flex-shrink-0">
+                           <img src="{{ 'https://i.pravatar.cc/150?img=12'}}" alt="" class="w-10 h-10 rounded-full border border-gray-600">
+                        </div>
+                        <div class="flex-grow">
+                           <div class="flex justify-between items-center mb-1">
+                              <span class="text-white font-bold text-sm"><span>@</span>{{ $review->user->username }}</span>
+                              <span class="text-textMuted text-xs">{{   $review->created_at }}</span>
+                           </div>
+                           <!-- <div class="flex mb-2">
+                           ${[1,2,3,4,5].map(i => `
+                              <svg class="w-3 h-3 ${i <= c.rating ? 'text-primary fill-current' : 'text-gray-600'}" viewBox="0 0 24 24">
+                                 <path d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z"/>
+                              </svg>
+                           `).join('')}
+                           </div> -->
+                           <p class="text-gray-300 text-sm leading-relaxed">{{ $review->review }}</p>
+                        </div>
+                     </div>
+                     @endforeach
               </div>
 
-                <p class="text-textMuted">No reviews available.</p>
             </div>
 
           </div>

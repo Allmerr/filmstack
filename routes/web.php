@@ -5,6 +5,8 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Auth\LoginController;
 use App\Http\Controllers\Auth\RegisterController;
 use App\Http\Controllers\Auth\LogoutController;
+use App\Http\Controllers\ReviewController;
+use App\Models\Review;
 
 Route::get('/', function () {
     $response = Http::get('https://api.imdbapi.dev/titles');
@@ -21,11 +23,13 @@ Route::get('/', function () {
 
 Route::get('/film/{tittleId}', function ($tittleId) {
     $response = Http::get("https://api.imdbapi.dev/titles/{$tittleId}");
-    // dd($response->json());
     return view('film', [
-        'data' => $response->json()
+        'data' => $response->json(),
+        'reviews' => Review::where('id_films', $tittleId)->with('user')->get(),
     ]);
 })->name('film');
+
+Route::post('reviews', [ReviewController::class, 'store'])->name('reviews.store')->middleware('auth');
 
 Route::get('/login', [LoginController::class, 'index'])->name('login');
 Route::post('/login', [LoginController::class, 'store'])->name('login.store');
