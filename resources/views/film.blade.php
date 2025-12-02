@@ -53,10 +53,22 @@
                       </button>
                      </form>
 
-                      <button onclick="toggleAction(this, 'like')" class="group flex items-center gap-2 px-4 py-2 rounded-lg bg-[#14181c] border border-white/10 hover:border-pink-500/50 hover:bg-pink-500/10 transition-all duration-300">
+                     <form action="{{ route('liked.store') }}" method="POST">
+                      @csrf
+                        <input type="hidden" name="id_films" value="{{ $data['id'] }}">
+                        @if($liked->isNotEmpty())
+                        <input type="hidden" name="alreadyLiked" value="1">
+                        <button type="submit" class="group flex items-center gap-2 px-4 py-2 rounded-lg bg-[#14181c] border border-white/10 border-pink-500/50 bg-pink-500/10 transition-all duration-300">
+                        <svg class="w-5 h-5 text-pink-500 fill-current transition-colors" viewBox="0 0 20 20"><path d="M3.172 5.172a4 4 0 015.656 0L10 6.343l1.172-1.171a4 4 0 115.656 5.656L10 18.657 3.172 10.828a4 4 0 010-5.656z"/></svg>
+                        <span class="font-bold text-sm text-textMuted text-white">Like</span>
+                        @else
+                        <input type="hidden" name="alreadyLiked" value="0">
+                        <button type="submit" class="group flex items-center gap-2 px-4 py-2 rounded-lg bg-[#14181c] border border-white/10 hover:border-pink-500/50 hover:bg-pink-500/10 transition-all duration-300">
                         <svg class="w-5 h-5 text-textMuted group-hover:text-pink-500 transition-colors" fill="currentColor" viewBox="0 0 20 20"><path d="M3.172 5.172a4 4 0 015.656 0L10 6.343l1.172-1.171a4 4 0 115.656 5.656L10 18.657 3.172 10.828a4 4 0 010-5.656z"/></svg>
                         <span class="font-bold text-sm text-textMuted group-hover:text-white">Like</span>
+                        @endif
                       </button>
+                     </form>
 
                       <button onclick="toggleAction(this, 'watchlist')" class="group flex items-center gap-2 px-4 py-2 rounded-lg bg-[#14181c] border border-white/10 hover:border-blue-500/50 hover:bg-blue-500/10 transition-all duration-300">
                          <svg class="w-5 h-5 text-textMuted group-hover:text-blue-500 transition-colors" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 5v14l7-5 7 5V5a2 2 0 00-2-2H7a2 2 0 00-2 2z"></path></svg>
