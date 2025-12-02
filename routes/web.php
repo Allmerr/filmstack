@@ -8,9 +8,11 @@ use App\Http\Controllers\Auth\LogoutController;
 use App\Http\Controllers\ReviewController;
 use App\Http\Controllers\WatchedController;
 use App\Http\Controllers\LikedController;
+use App\Http\Controllers\WatchlistController;
 use App\Models\Review;
 use App\Models\Watched;
 use App\Models\Liked;
+use App\Models\Watchlist;
 
 Route::get('/', function () {
     $response = Http::get('https://api.imdbapi.dev/titles');
@@ -32,12 +34,14 @@ Route::get('/film/{tittleId}', function ($tittleId) {
         'reviews' => Review::where('id_films', $tittleId)->with('user')->get(),
         'watched' => Watched::where('id_films', $tittleId)->with('user')->get(),
         'liked' => Liked::where('id_films', $tittleId)->with('user')->get(),
+        'watchlist' => Watchlist::where('id_films', $tittleId)->with('user')->get(),
     ]);
 })->name('film');
 
 Route::post('reviews', [ReviewController::class, 'store'])->name('reviews.store')->middleware('auth');
 Route::post('watched', [WatchedController::class, 'store'])->name('watched.store')->middleware('auth');
 Route::post('liked', [LikedController::class, 'store'])->name('liked.store')->middleware('auth');
+Route::post('watchlist', [WatchlistController::class, 'store'])->name('watchlist.store')->middleware('auth');
 
 Route::get('/login', [LoginController::class, 'index'])->name('login');
 Route::post('/login', [LoginController::class, 'store'])->name('login.store');

@@ -43,7 +43,7 @@
                         <input type="hidden" name="alreadyLiked" value="1">
                         <button type="submit" class="group flex items-center gap-2 px-4 py-2 rounded-lg bg-[#14181c] border border-white/10 border-green-500/50 bg-green-500/10 transition-all duration-300">
                         <svg class="w-5 h-5  text-green-500 transition-colors" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"></path><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.477 0 8.268 2.943 9.542 7-1.274 4.057-5.065 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"></path></svg>
-                        <span class="font-bold text-sm text-textMuted text-white">Watch</span>
+                        <span class="font-bold text-sm text-textMuted text-white">Unwatch</span>
                         @else
                         <input type="hidden" name="alreadyLiked" value="0">
                         <button type="submit" class="group flex items-center gap-2 px-4 py-2 rounded-lg bg-[#14181c] border border-white/10 hover:border-green-500/50 hover:bg-green-500/10 transition-all duration-300">
@@ -60,7 +60,7 @@
                         <input type="hidden" name="alreadyLiked" value="1">
                         <button type="submit" class="group flex items-center gap-2 px-4 py-2 rounded-lg bg-[#14181c] border border-white/10 border-pink-500/50 bg-pink-500/10 transition-all duration-300">
                         <svg class="w-5 h-5 text-pink-500 fill-current transition-colors" viewBox="0 0 20 20"><path d="M3.172 5.172a4 4 0 015.656 0L10 6.343l1.172-1.171a4 4 0 115.656 5.656L10 18.657 3.172 10.828a4 4 0 010-5.656z"/></svg>
-                        <span class="font-bold text-sm text-textMuted text-white">Like</span>
+                        <span class="font-bold text-sm text-textMuted text-white">Unlike</span>
                         @else
                         <input type="hidden" name="alreadyLiked" value="0">
                         <button type="submit" class="group flex items-center gap-2 px-4 py-2 rounded-lg bg-[#14181c] border border-white/10 hover:border-pink-500/50 hover:bg-pink-500/10 transition-all duration-300">
@@ -70,25 +70,40 @@
                       </button>
                      </form>
 
-                      <button onclick="toggleAction(this, 'watchlist')" class="group flex items-center gap-2 px-4 py-2 rounded-lg bg-[#14181c] border border-white/10 hover:border-blue-500/50 hover:bg-blue-500/10 transition-all duration-300">
-                         <svg class="w-5 h-5 text-textMuted group-hover:text-blue-500 transition-colors" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 5v14l7-5 7 5V5a2 2 0 00-2-2H7a2 2 0 00-2 2z"></path></svg>
-                         <span class="font-bold text-sm text-textMuted group-hover:text-white">Watchlist</span>
-                      </button>
+                     <form action="{{ route('watchlist.store') }}" method="POST">
+                        @csrf
+                           <input type="hidden" name="id_films" value="{{ $data['id'] }}">
+                           @if($watchlist->isNotEmpty())
+                           <input type="hidden" name="alreadyInWatchlist" value="1">
+                           <button type="submit" class="group flex items-center gap-2 px-4 py-2 rounded-lg bg-[#14181c] border border-white/10 border-blue-500/50 bg-blue-500/10 transition-all duration-300">
+                           <svg class="w-5 h-5  text-blue-500 transition-colors" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 5v14l7-5 7 5V5a2 2 0 00-2-2H7a2 2 0 00-2 2z"></path></svg>
+                           <span class="font-bold text-sm text-textMuted text-white">Remove</span>
+                           @else
+                           <input type="hidden" name="alreadyInWatchlist" value="0">
+                           <button type="submit" class="group flex items-center gap-2 px-4 py-2 rounded-lg bg-[#14181c] border border-white/10 hover:border-blue-500/50 hover:bg-blue-500/10 transition-all duration-300">
+                           <svg class="w-5 h-5 text-textMuted group-hover:text-blue-500 transition-colors" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 5v14l7-5 7 5V5a2 2 0 00-2-2H7a2 2 0 00-2 2z"></path></svg>
+                           <span class="font-bold text-sm text-textMuted group-hover:text-white">Watchlist</span>
+                           @endif
+                        </button>
+                     </form>
                    </div>
 
                    <div class="w-px h-8 bg-white/10 hidden sm:block"></div>
 
                    <!-- Rating -->
+                  <form action="#" method="POST">
                    <div class="flex items-center gap-1">
                       <span class="text-xs uppercase font-bold text-textMuted mr-2">Rate</span>
                       <div class="flex text-gray-600 hover:text-primary transition-colors cursor-pointer" id="film-rating-stars">
                         @foreach ([1,2,3,4,5] as $i)
+                           <input type="hidden" name="rating" value="{{ $i }}">
                            <svg onclick="rateMovie(this, {{ $i }})" class="w-6 h-6 hover:text-primary hover:fill-current fill-transparent stroke-current transition-all duration-200" viewBox="0 0 24 24">
                              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11.049 2.927c.3-.921 1.603-.921 1.902 0l1.519 4.674a1 1 0 00.95.69h4.915c.969 0 1.371 1.24.588 1.81l-3.976 2.888a1 1 0 00-.363 1.118l1.518 4.674c.3.922-.755 1.688-1.538 1.118l-3.976-2.888a1 1 0 00-1.176 0l-3.976 2.888c-.783.57-1.838-.197-1.538-1.118l1.518-4.674a1 1 0 00-.363-1.118l-3.976-2.888c-.784-.57-.38-1.81.588-1.81h4.914a1 1 0 00.951-.69l1.519-4.674z" />
                            </svg>
                         @endforeach
                       </div>
                    </div>
+                   </form>  
 
                 </div>
 
@@ -188,45 +203,8 @@
         </div>
 @endsection
 
-@push('script')
+@push('js')
 <script>
- function toggleAction(btn, type) {
-          // Simple visual toggle for demo purposes
-          const isActive = btn.classList.contains('bg-opacity-20'); // Check crude state
-          
-          let activeClasses = [];
-          let borderClass = '';
-          
-          if (type === 'watched') {
-             activeClasses = ['bg-green-600/20', 'text-green-400', 'border-green-600/50'];
-             borderClass = 'border-green-500/50';
-          } else if (type === 'like') {
-             activeClasses = ['bg-pink-600/20', 'text-pink-400', 'border-pink-600/50'];
-             borderClass = 'border-pink-500/50';
-          } else if (type === 'watchlist') {
-             activeClasses = ['bg-blue-600/20', 'text-blue-400', 'border-blue-600/50'];
-             borderClass = 'border-blue-500/50';
-          }
-
-          // Remove base dark classes to apply active state, or revert
-          if (btn.classList.contains(activeClasses[0])) {
-              // Deactivate
-              btn.classList.remove(...activeClasses);
-              btn.classList.add('bg-[#14181c]', 'border-white/10');
-              btn.querySelector('svg').classList.remove('fill-current', activeClasses[1]);
-              btn.querySelector('svg').classList.add('text-textMuted');
-          } else {
-              // Activate
-              btn.classList.remove('bg-[#14181c]', 'border-white/10');
-              btn.classList.add(...activeClasses);
-              // Fill icon if needed
-              if (type === 'like') {
-                  btn.querySelector('svg').classList.add('fill-current');
-              }
-              btn.querySelector('svg').classList.remove('text-textMuted');
-          }
-      }
-
       function rateMovie(star, rating) {
           const parent = star.parentElement;
           const stars = parent.querySelectorAll('svg');
