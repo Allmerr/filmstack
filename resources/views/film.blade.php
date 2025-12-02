@@ -36,10 +36,22 @@
                    
                    <!-- Interactive Buttons -->
                    <div class="flex gap-3">
-                      <button onclick="toggleAction(this, 'watched')" class="group flex items-center gap-2 px-4 py-2 rounded-lg bg-[#14181c] border border-white/10 hover:border-green-500/50 hover:bg-green-500/10 transition-all duration-300">
+                     <form action="{{ route('watched.store') }}" method="POST">
+                      @csrf
+                        <input type="hidden" name="id_films" value="{{ $data['id'] }}">
+                        @if($watched->isNotEmpty())
+                        <input type="hidden" name="alreadyLiked" value="1">
+                        <button type="submit" class="group flex items-center gap-2 px-4 py-2 rounded-lg bg-[#14181c] border border-white/10 border-green-500/50 bg-green-500/10 transition-all duration-300">
+                        <svg class="w-5 h-5  text-green-500 transition-colors" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"></path><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.477 0 8.268 2.943 9.542 7-1.274 4.057-5.065 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"></path></svg>
+                        <span class="font-bold text-sm text-textMuted text-white">Watch</span>
+                        @else
+                        <input type="hidden" name="alreadyLiked" value="0">
+                        <button type="submit" class="group flex items-center gap-2 px-4 py-2 rounded-lg bg-[#14181c] border border-white/10 hover:border-green-500/50 hover:bg-green-500/10 transition-all duration-300">
                         <svg class="w-5 h-5 text-textMuted group-hover:text-green-500 transition-colors" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"></path><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.477 0 8.268 2.943 9.542 7-1.274 4.057-5.065 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"></path></svg>
                         <span class="font-bold text-sm text-textMuted group-hover:text-white">Watch</span>
+                        @endif
                       </button>
+                     </form>
 
                       <button onclick="toggleAction(this, 'like')" class="group flex items-center gap-2 px-4 py-2 rounded-lg bg-[#14181c] border border-white/10 hover:border-pink-500/50 hover:bg-pink-500/10 transition-all duration-300">
                         <svg class="w-5 h-5 text-textMuted group-hover:text-pink-500 transition-colors" fill="currentColor" viewBox="0 0 20 20"><path d="M3.172 5.172a4 4 0 015.656 0L10 6.343l1.172-1.171a4 4 0 115.656 5.656L10 18.657 3.172 10.828a4 4 0 010-5.656z"/></svg>
