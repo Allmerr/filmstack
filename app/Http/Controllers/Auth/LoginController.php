@@ -21,7 +21,7 @@ class LoginController extends Controller
         // Attempt to authenticate the user
         if (auth()->attempt($credentials)) {
             // Authentication passed...
-            return redirect()->intended('welcome');
+            return redirect()->intended('/');
         }
         
         // Authentication failed...

@@ -10,6 +10,7 @@ use App\Http\Controllers\WatchedController;
 use App\Http\Controllers\LikedController;
 use App\Http\Controllers\WatchlistController;
 use App\Http\Controllers\RatedController;
+use App\Http\Controllers\ProfileController;
 use App\Models\Review;
 use App\Models\Watched;
 use App\Models\Liked;
@@ -54,6 +55,12 @@ Route::get('/search', function () {
         'films' => $data['titles']
     ]);
 })->name('search');
+
+Route::get('/profile/{username}/watched', [ProfileController::class, 'watched'])->name('profile.watched');
+Route::get('/profile/{username}/liked', [ProfileController::class, 'liked'])->name('profile.liked');
+Route::get('/profile/{username}/reviews', [ProfileController::class, 'reviews'])->name('profile.reviews');
+Route::get('/profile/{username}/lists', [ProfileController::class, 'lists'])->name('profile.lists');
+Route::get('/profile/{username}/watchlist', [ProfileController::class, 'watchlist'])->name('profile.watchlist');
 
 Route::post('reviews', [ReviewController::class, 'store'])->name('reviews.store')->middleware('auth');
 Route::post('watched', [WatchedController::class, 'store'])->name('watched.store')->middleware('auth');

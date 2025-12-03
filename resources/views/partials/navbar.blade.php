@@ -4,13 +4,13 @@
         <!-- Logo -->
         <div class="flex items-center gap-8">
           <a href="{{ route('welcome') }}" class="flex items-center gap-2 group">
-            <div class="w-8 h-8 grid grid-cols-2 gap-0.5">
+            <div class="w-6 h-6 grid grid-cols-2 gap-0.5">
                <div class="bg-white rounded-full opacity-90 group-hover:bg-primary transition-colors"></div>
                <div class="bg-white rounded-full opacity-60 group-hover:bg-primary transition-colors"></div>
                <div class="bg-white rounded-full opacity-70 group-hover:bg-primary transition-colors"></div>
                <div class="bg-none"></div> 
             </div>
-            <span class="text-xl font-bold text-white tracking-wide">Filmstack</span>
+            <span class="text-sm font-bold uppercase text-white tracking-wide">Filmstack</span>
           </a>
           
           <div class="hidden md:flex items-center gap-6 text-sm font-semibold text-textMuted uppercase tracking-wider">
@@ -19,7 +19,7 @@
             <a href="{{ route('register') }}" class="hover:text-white transition-colors">Create Account</a>
             @endguest
             @auth
-            <a href="#" class="hover:text-white transition-colors">Profile</a>
+            <a href="{{ route('profile.watched', ['username' => auth()->user()->username]) }}" class="hover:text-white transition-colors">Profile</a>
             <a href="#" class="hover:text-white transition-colors">Journal</a>
             @endauth
             <a href="#" class="hover:text-white transition-colors">Films</a>

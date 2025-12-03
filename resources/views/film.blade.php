@@ -207,7 +207,7 @@
                         </div>
                         <div class="flex-grow">
                            <div class="flex justify-between items-center mb-1">
-                              <span class="text-white font-bold text-sm"><span>@</span>{{ $review->user->username }}</span>
+                              <span class="text-white font-bold text-sm"><a href="{{ route('profile.watched', ['username' => $review->user->username]) }}"><span>@</span>{{ $review->user->username }}</a></span>
                               <span class="text-textMuted text-xs">{{   $review->created_at }}</span>
                            </div>
                            <!-- <div class="flex mb-2">
