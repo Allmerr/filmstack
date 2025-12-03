@@ -249,24 +249,45 @@
                      <div class="bg-[#1f252b] w-full max-w-md rounded-xl shadow-2xl border border-white/10 relative transform scale-95 transition-all duration-300 z-10 overflow-hidden">
                         <div class="p-6">
                            <div class="flex justify-between items-center mb-6">
-                                 <h3 class="text-white font-bold text-xl">Add to Playlist</h3>
+                                 <h3 class="text-white font-bold text-xl">Add to List</h3>
                                  <button onclick="closePlaylistModal()" class="text-textMuted hover:text-white transition-colors">
                                     <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg>
                                  </button>
                            </div>
                            
-                           <!-- Playlist Items -->
+                           <!-- List Items -->  
                            <div id="playlist-items-container" class="space-y-2 max-h-64 overflow-y-auto mb-6 custom-scrollbar pr-2">
-                                 <!-- Items injected by JS -->
+                              @foreach ($playlists as $pl)
+                                 <form action="{{ route('playlists.toggle') }}" method="POST" class="w-full">
+                                    @csrf
+                                    <input type="hidden" name="playlist_id" value="{{ $pl->id }}">
+                                    <input type="hidden" name="id_films" value="{{ $data['id'] }}">
+                                    <button type="submit" class="w-full text-left flex items-center justify-between p-3 rounded bg-[#14181c] border border-white/5 hover:bg-[#2c3440] cursor-pointer group transition-colors">
+                                       <div>
+                                          <p class="text-white font-bold text-sm">{{ $pl->name }}</p>
+                                       </div>
+                                       <div id="check-{{ $pl->id }}" class="w-6 h-6 rounded-full border border-gray-600 flex items-center justify-center transition-colors">
+                                          <!-- optional: server can return whether movie is already in playlist and you can render the check SVG conditionally here -->
+                                          <svg class="w-4 h-4 text-darker font-bold" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M5 13l4 4L19 7"></path>
+                                          </svg>
+                                       </div>
+                                    </button>
+                                 </form>
+                              @endforeach
                            </div>
 
                            <!-- Create New -->
                            <div class="pt-4 border-t border-white/10">
-                                 <label class="block text-xs font-bold text-textMuted uppercase tracking-widest mb-2">Create New Playlist</label>
-                                 <div class="flex gap-2">
-                                    <input id="new-playlist-name" type="text" placeholder="Name..." class="bg-[#14181c] border border-gray-700 text-white text-sm rounded px-3 py-2 flex-grow focus:border-primary focus:outline-none transition-colors">
-                                    <button onclick="createNewPlaylist('${id}')" class="bg-primary hover:bg-white text-darker font-bold text-sm px-4 rounded transition-colors whitespace-nowrap">Create</button>
-                                 </div>
+                                 <form action="{{ route('playlists.store') }}" method="post">
+                                    @csrf
+                                    <input type="hidden" name="id_films" value="{{ $data['id'] }}">
+                                    <label class="block text-xs font-bold text-textMuted uppercase tracking-widest mb-2">Create New List</label>
+                                    <div class="flex gap-2">
+                                       <input name="name" id="new-playlist-name" type="text" placeholder="Name..." class="bg-[#14181c] border border-gray-700 text-white text-sm rounded px-3 py-2 flex-grow focus:border-primary focus:outline-none transition-colors">
+                                       <button type="submit" class="bg-primary hover:bg-white text-darker font-bold text-sm px-4 rounded transition-colors whitespace-nowrap">Create</button>
+                                    </div>
+                                 </form>
                            </div>
                         </div>
                      </div>
@@ -383,22 +404,6 @@
          const container = document.getElementById('playlist-items-container');
          
           if(!modal || !container) return;
-
-          // Render list
-          container.innerHTML = currentUser.playlists.map(pl => {
-              const inList = pl.movieIds.includes(movieId);
-              return `
-                <div onclick="toggleMovieInPlaylist('${pl.id}', '${movieId}')" class="flex items-center justify-between p-3 rounded bg-[#14181c] border border-white/5 hover:bg-[#2c3440] cursor-pointer group transition-colors">
-                    <div>
-                        <p class="text-white font-bold text-sm">${pl.name}</p>
-                        <p class="text-textMuted text-xs">${pl.count} items</p>
-                    </div>
-                    <div id="check-${pl.id}" class="w-6 h-6 rounded-full border border-gray-600 flex items-center justify-center ${inList ? 'bg-primary border-primary' : ''} transition-colors">
-                         ${inList ? '<svg class="w-4 h-4 text-darker font-bold" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M5 13l4 4L19 7"></path></svg>' : ''}
-                    </div>
-                </div>
-              `;
-          }).join('');
 
           // Show modal
           modal.classList.remove('opacity-0', 'pointer-events-none');

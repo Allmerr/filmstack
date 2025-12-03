@@ -11,6 +11,7 @@ use App\Http\Controllers\LikedController;
 use App\Http\Controllers\WatchlistController;
 use App\Http\Controllers\RatedController;
 use App\Http\Controllers\ProfileController;
+use App\Http\Controllers\PlaylistController;
 use App\Models\Review;
 use App\Models\Watched;
 use App\Models\Liked;
@@ -32,8 +33,10 @@ Route::get('/', function () {
 
 Route::get('/film/{tittleId}', function ($tittleId) {
     $response = Http::get("https://api.imdbapi.dev/titles/{$tittleId}");
+
     return view('film', [
         'data' => $response->json(),
+        'playlists' => auth()->check() ? auth()->user()->playlists : [],
         'reviews' => Review::where('id_films', $tittleId)->with('user')->get(),
         'watched' => Watched::where('id_films', $tittleId)->with('user')->get(),
         'liked' => Liked::where('id_films', $tittleId)->with('user')->get(),
@@ -55,6 +58,9 @@ Route::get('/search', function () {
         'films' => $data['titles']
     ]);
 })->name('search');
+
+Route::post('/playlists', [PlaylistController::class, 'store'])->name('playlists.store')->middleware('auth');
+Route::post('/playlists/add-film', [PlaylistController::class, 'addFilmToPlaylist'])->name('playlists.toggle')->middleware('auth');
 
 Route::get('/profile/{username}/watched', [ProfileController::class, 'watched'])->name('profile.watched');
 Route::get('/profile/{username}/liked', [ProfileController::class, 'liked'])->name('profile.liked');
