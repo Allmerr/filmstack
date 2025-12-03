@@ -1,4 +1,6 @@
 @extends('layouts.main')
+@push('css')
+@endpush
 @section('content')
      <div class="fade-in bg-dark min-h-screen pb-20">
           <!-- Cinematic Backdrop -->
@@ -86,6 +88,12 @@
                            @endif
                         </button>
                      </form>
+                     
+                      <!-- ADD TO LIST BUTTON -->
+                      <button onclick="openPlaylistModal('{{ $data['id'] }}')" class="group flex items-center gap-2 px-4 py-2 rounded-lg bg-[#14181c] border border-white/10 hover:border-purple-500/50 hover:bg-purple-500/10 transition-all duration-300">
+                         <svg class="w-5 h-5 text-textMuted group-hover:text-purple-500 transition-colors" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"></path></svg>
+                         <span class="font-bold text-sm text-textMuted group-hover:text-white">List</span>
+                      </button>
                    </div>
 
                    <div class="w-px h-8 bg-white/10 hidden sm:block"></div>
@@ -129,7 +137,7 @@
                         @endif 
                       </div>
                    </div>
-                   </form>  
+                  </form>  
 
                 </div>
 
@@ -213,7 +221,7 @@
                         <div class="flex-grow">
                            <div class="flex justify-between items-center mb-1">
                               <span class="text-white font-bold text-sm"><a href="{{ route('profile.watched', ['username' => $review->user->username]) }}"><span>@</span>{{ $review->user->username }}</a></span>
-                              <span class="text-textMuted text-xs">{{   $review->created_at }}</span>
+                              <span class="text-textMuted text-xs">{{ $review->created_at }}</span>
                            </div>
                            <!-- <div class="flex mb-2">
                            ${[1,2,3,4,5].map(i => `
@@ -232,6 +240,37 @@
 
           </div>
         </div>
+        
+                  <div id="playlist-modal" class="fixed inset-0 z-[60] flex items-center justify-center opacity-0 pointer-events-none transition-all duration-300">
+                     <!-- Overlay -->
+                     <div class="absolute inset-0 bg-black/80 backdrop-blur-sm transition-opacity" onclick="closePlaylistModal()"></div>
+                     
+                     <!-- Card -->
+                     <div class="bg-[#1f252b] w-full max-w-md rounded-xl shadow-2xl border border-white/10 relative transform scale-95 transition-all duration-300 z-10 overflow-hidden">
+                        <div class="p-6">
+                           <div class="flex justify-between items-center mb-6">
+                                 <h3 class="text-white font-bold text-xl">Add to Playlist</h3>
+                                 <button onclick="closePlaylistModal()" class="text-textMuted hover:text-white transition-colors">
+                                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg>
+                                 </button>
+                           </div>
+                           
+                           <!-- Playlist Items -->
+                           <div id="playlist-items-container" class="space-y-2 max-h-64 overflow-y-auto mb-6 custom-scrollbar pr-2">
+                                 <!-- Items injected by JS -->
+                           </div>
+
+                           <!-- Create New -->
+                           <div class="pt-4 border-t border-white/10">
+                                 <label class="block text-xs font-bold text-textMuted uppercase tracking-widest mb-2">Create New Playlist</label>
+                                 <div class="flex gap-2">
+                                    <input id="new-playlist-name" type="text" placeholder="Name..." class="bg-[#14181c] border border-gray-700 text-white text-sm rounded px-3 py-2 flex-grow focus:border-primary focus:outline-none transition-colors">
+                                    <button onclick="createNewPlaylist('${id}')" class="bg-primary hover:bg-white text-darker font-bold text-sm px-4 rounded transition-colors whitespace-nowrap">Create</button>
+                                 </div>
+                           </div>
+                        </div>
+                     </div>
+                  </div>
 @endsection
 
 @push('js')
@@ -314,6 +353,115 @@
                 </div>
             </div>
         `;
+      }
+
+      const currentUser = {
+          username: "FilmBuff99",
+          handle: "@filmbuff99",
+          avatar: "https://i.pravatar.cc/150?u=me",
+          bio: "Cinema addict. Noir enthusiast. I watch movies so you don't have to.",
+          stats: {
+              watched: 142,
+              thisYear: 24,
+              lists: 3,
+              following: 88,
+              followers: 340
+          },
+          // IDs of movies watched/liked
+          watched: ['1', '3', '5', '6'],
+          liked: ['2', '4', '6'],
+          // Mock Playlists
+          playlists: [
+            { id: 'pl1', name: 'Weekend Vibes', count: 4, movieIds: ['1', '2'] },
+            { id: 'pl2', name: 'Sci-Fi Masterpieces', count: 12, movieIds: ['1'] },
+            { id: 'pl3', name: 'To Watch with Dad', count: 2, movieIds: [] }
+          ]
+      };
+
+      function openPlaylistModal(movieId) {
+         const modal = document.getElementById('playlist-modal');
+         const container = document.getElementById('playlist-items-container');
+         
+          if(!modal || !container) return;
+
+          // Render list
+          container.innerHTML = currentUser.playlists.map(pl => {
+              const inList = pl.movieIds.includes(movieId);
+              return `
+                <div onclick="toggleMovieInPlaylist('${pl.id}', '${movieId}')" class="flex items-center justify-between p-3 rounded bg-[#14181c] border border-white/5 hover:bg-[#2c3440] cursor-pointer group transition-colors">
+                    <div>
+                        <p class="text-white font-bold text-sm">${pl.name}</p>
+                        <p class="text-textMuted text-xs">${pl.count} items</p>
+                    </div>
+                    <div id="check-${pl.id}" class="w-6 h-6 rounded-full border border-gray-600 flex items-center justify-center ${inList ? 'bg-primary border-primary' : ''} transition-colors">
+                         ${inList ? '<svg class="w-4 h-4 text-darker font-bold" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M5 13l4 4L19 7"></path></svg>' : ''}
+                    </div>
+                </div>
+              `;
+          }).join('');
+
+          // Show modal
+          modal.classList.remove('opacity-0', 'pointer-events-none');
+          const card = modal.querySelector('.transform');
+          card.classList.remove('scale-95');
+          card.classList.add('scale-100');
+      }
+
+      function closePlaylistModal() {
+          const modal = document.getElementById('playlist-modal');
+          if(!modal) return;
+          
+          const card = modal.querySelector('.transform');
+          card.classList.remove('scale-100');
+          card.classList.add('scale-95');
+          
+          modal.classList.add('opacity-0', 'pointer-events-none');
+      }
+
+      function toggleMovieInPlaylist(playlistId, movieId) {
+          const playlist = currentUser.playlists.find(p => p.id === playlistId);
+          if(!playlist) return;
+
+          const index = playlist.movieIds.indexOf(movieId);
+          const checkEl = document.getElementById(`check-${playlistId}`);
+
+          if(index > -1) {
+              // Remove
+              playlist.movieIds.splice(index, 1);
+              playlist.count--;
+              checkEl.classList.remove('bg-primary', 'border-primary');
+              checkEl.innerHTML = '';
+          } else {
+              // Add
+              playlist.movieIds.push(movieId);
+              playlist.count++;
+              checkEl.classList.add('bg-primary', 'border-primary');
+              checkEl.innerHTML = '<svg class="w-4 h-4 text-darker font-bold" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M5 13l4 4L19 7"></path></svg>';
+          }
+      }
+
+      function createNewPlaylist(movieId) {
+          const input = document.getElementById('new-playlist-name');
+          const name = input.value.trim();
+          
+          if(!name) {
+              alert("Please enter a playlist name.");
+              return;
+          }
+
+          const newId = 'pl' + Date.now();
+          const newPlaylist = {
+              id: newId,
+              name: name,
+              count: 1,
+              movieIds: [movieId] // Auto add current movie
+          };
+
+          currentUser.playlists.push(newPlaylist);
+          input.value = ''; // Reset input
+
+          // Re-render list inside modal to show new item
+          openPlaylistModal(movieId);
       }
 
       </script>
