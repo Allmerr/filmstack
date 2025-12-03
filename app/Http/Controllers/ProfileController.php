@@ -36,66 +36,69 @@ class ProfileController extends Controller
 
     public function liked($username)
     {
-        $id_user = \App\Models\User::where('username', $username)->firstOrFail()->id;
-        $liked = Liked::where('users_id', $id_user)->get();
+        $user = \App\Models\User::where('username', $username)->firstOrFail();
+        $liked = Liked::where('users_id', $user->id)->get();
         foreach ($liked as $key => $like) {
             $response = Http::get("https://api.imdbapi.dev/titles/{$like->id_films}");
             $liked[$key]->movie = $response->json();
         }
         foreach ($liked as $key => $like) {
-            $rated = Rated::where('users_id', $id_user)->where('id_films', $like->id_films)->first();
+            $rated = Rated::where('users_id', $user->id)->where('id_films', $like->id_films)->first();
             $liked[$key]->rated = $rated;
         }
 
 
         return view('profile.liked', [
-            'reviews' => Review::where('users_id', $id_user)->with('user')->get(),
-            'watched' => Watched::where('users_id', $id_user)->with('user')->get(),
+            'user' => $user,
+            'reviews' => Review::where('users_id', $user->id)->with('user')->get(),
+            'watched' => Watched::where('users_id', $user->id)->with('user')->get(),
             'liked' => $liked,
-            'watchlist' => Watchlist::where('users_id', $id_user)->with('user')->get(),
+            'watchlist' => Watchlist::where('users_id', $user->id)->with('user')->get(),
         ]);
     }
 
     public function reviews($username)
     {
-        $id_user = \App\Models\User::where('username', $username)->firstOrFail()->id;
-        $review = Review::where('users_id', $id_user)->get();
+        $user = \App\Models\User::where('username', $username)->firstOrFail();
+        $review = Review::where('users_id', $user->id)->get();
         foreach ($review as $key => $like) {
             $response = Http::get("https://api.imdbapi.dev/titles/{$like->id_films}");
             $review[$key]->movie = $response->json();
         }
         foreach ($review as $key => $like) {
-            $rated = Rated::where('users_id', $id_user)->where('id_films', $like->id_films)->first();
+            $rated = Rated::where('users_id', $user->id)->where('id_films', $like->id_films)->first();
             $review[$key]->rated = $rated;
         }
 
 
         return view('profile.review', [
+            'user' => $user,
             'reviews' => $review,
-            'watched' => Watched::where('users_id', $id_user)->with('user')->get(),
-            'liked' => Liked::where('users_id', $id_user)->with('user')->get(),
-            'watchlist' => Watchlist::where('users_id', $id_user)->with('user')->get(),
+            'watched' => Watched::where('users_id', $user->id)->with('user')->get(),
+            'liked' => Liked::where('users_id', $user->id)->with('user')->get(),
+            'watchlist' => Watchlist::where('users_id', $user->id)->with('user')->get(),
         ]);
     }
 
     public function watchlist($username)
     {
-        $id_user = \App\Models\User::where('username', $username)->firstOrFail()->id;
-        $watchlist = Watchlist::where('users_id', $id_user)->get();
+        $user = \App\Models\User::where('username', $username)->firstOrFail();
+        $watchlist = Watchlist::where('users_id', $user->id)->get();
         foreach ($watchlist as $key => $like) {
             $response = Http::get("https://api.imdbapi.dev/titles/{$like->id_films}");
             $watchlist[$key]->movie = $response->json();
         }
         foreach ($watchlist as $key => $like) {
-            $rated = Rated::where('users_id', $id_user)->where('id_films', $like->id_films)->first();
+            $rated = Rated::where('users_id', $user->id)->where('id_films', $like->id_films)->first();
             $watchlist[$key]->rated = $rated;
         }
 
 
         return view('profile.watchlist', [
-            'reviews' => Review::where('users_id', $id_user)->with('user')->get(),
-            'watched' => Watched::where('users_id', $id_user)->with('user')->get(),
-            'liked' => Liked::where('users_id', $id_user)->with('user')->get(),
+            'user' => $user,
+            'reviews' => Review::where('users_id', $user->id)->with('user')->get(),
+            'watched' => Watched::where('users_id', $user->id)->with('user')->get(),
+            'liked' => Liked::where('users_id', $user->id)->with('user')->get(),
             'watchlist' => $watchlist,
         ]);
     }

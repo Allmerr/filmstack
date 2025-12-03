@@ -8,6 +8,9 @@ class ReviewController extends Controller
 {
     public function store(Request $request)
     {
+        if(\App\Models\Review::where('users_id', auth()->user()->id)->where('id_films', $request->input('id_films'))->exists()) {
+            return redirect()->back()->with('error', 'You have already reviewed this film!');
+        }
         // Validate the incoming request data
         $validated = $request->validate([
             'id_films' => 'required',

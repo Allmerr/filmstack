@@ -186,6 +186,11 @@
                 <!-- Comment Input -->
                  <form action="{{ route('reviews.store') }}" method="POST">
                   @csrf
+                  @if(session('error'))
+                    <div class="bg-red-500 text-white p-3 rounded mb-4">
+                      {{ session('error') }}
+                    </div>
+                  @endif
                   <input type="hidden" name="id_films" value="{{ $data['id'] }}">
                 <div class="bg-[#1f252b] p-6 rounded-lg border border-white/5 mb-8 shadow-inner">
                      <textarea id="comment-input" name="review" class="w-full bg-[#14181c] text-white p-3 rounded border border-gray-700 focus:border-primary focus:outline-none transition-colors placeholder-textMuted text-sm" rows="3" placeholder="Add a review..."></textarea>
