@@ -20,7 +20,7 @@
 
                 <!-- User Info -->
                 <div class="flex-grow text-center md:text-left">
-                    <h1 class="text-3xl md:text-4xl font-bold text-white mb-1">{{ auth()->user()->username }}</h1>
+                    <h1 class="text-3xl md:text-4xl font-bold text-white mb-1">{{ $user->username }}</h1>
                     <p class="text-textMuted text-sm mb-4">Lorem ipsum dolor sit amet consectetur adipisicing elit. Ipsam, veniam optio? Sint, nesciunt pariatur cum tempora neque molestiae quisquam ut quae animi! Dolore incidunt beatae expedita, provident repellat magni fugiat!</p>
 
                     <div class="flex justify-center md:justify-start gap-6 md:gap-10 text-sm">
@@ -58,16 +58,16 @@
    <div class="bg-[#14181c] border-b border-gray-800 sticky top-[72px] z-40">
         <div class="max-w-5xl mx-auto px-6 flex gap-8 text-sm font-bold uppercase tracking-widest overflow-x-auto">
             <button class="py-4 border-b-2 border-primary text-white transition-colors whitespace-nowrap">
-                <a href="{{ route('profile.watched', ['username' => auth()->user()->username]) }}">Watched</a> <span class="text-xs text-gray-600 ml-1">{{ $watched->count() }}</span>
+                <a href="{{ route('profile.watched', ['username' => $user->username]) }}">Watched</a> <span class="text-xs text-gray-600 ml-1">{{ $watched->count() }}</span>
             </button>
             <button class="py-4 border-b-2 border-transparent text-textMuted hover:text-white transition-colors whitespace-nowrap">
-                <a href="{{ route('profile.liked', ['username' => auth()->user()->username]) }}">Likes</a> <span class="text-xs text-gray-600 ml-1">{{$liked->count()}}</span>
+                <a href="{{ route('profile.liked', ['username' => $user->username]) }}">Likes</a> <span class="text-xs text-gray-600 ml-1">{{$liked->count()}}</span>
             </button>
             <button class="py-4 border-b-2 border-transparent text-textMuted hover:text-white transition-colors whitespace-nowrap">
-                <a href="{{ route('profile.reviews', ['username' => auth()->user()->username]) }}">Reviews</a> <span class="text-xs text-gray-600 ml-1">{{$reviews->count()}}</span>
+                <a href="{{ route('profile.reviews', ['username' => $user->username]) }}">Reviews</a> <span class="text-xs text-gray-600 ml-1">{{$reviews->count()}}</span>
             </button>
             <button class="py-4 border-b-2 border-transparent text-textMuted hover:text-white transition-colors whitespace-nowrap">
-                <a href="{{ route('profile.watchlist', ['username' => auth()->user()->username]) }}">Watchlist</a> <span class="text-xs text-gray-600 ml-1">{{$watchlist->count()}}</span>
+                <a href="{{ route('profile.watchlist', ['username' => $user->username]) }}">Watchlist</a> <span class="text-xs text-gray-600 ml-1">{{$watchlist->count()}}</span>
             </button>
             <button class="py-4 border-b-2 border-transparent text-textMuted hover:text-white transition-colors whitespace-nowrap">
                 Lists
@@ -84,14 +84,14 @@
 
             <!-- Movie Item -->
             @foreach($watched as $watch)
-            <div class="relative group cursor-pointer">
+            <a href="{{ url('/film/'.$watch->movie['id']) }}" class="relative group cursor-pointer block">
                 <div class="relative pb-[150%] rounded overflow-hidden border border-white/10 hover:border-primary transition-colors">
                     <img src="{{ $watch->movie['primaryImage']['url'] }}" class="absolute inset-0 w-full h-full object-cover" />
                     <div class="absolute inset-0 bg-black/60 opacity-0 group-hover:opacity-100 flex items-center justify-center transition-opacity">
                         <span class="text-white font-bold text-sm text-center px-1">{{ $watch->rated->rating ?? 'Not Rated' }} ★</span>
                     </div>
                 </div>
-            </div>
+            </a>
             @endforeach
 
             <!-- Tambahkan item lain disini -->

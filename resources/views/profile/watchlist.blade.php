@@ -20,7 +20,7 @@
 
                 <!-- User Info -->
                 <div class="flex-grow text-center md:text-left">
-                    <h1 class="text-3xl md:text-4xl font-bold text-white mb-1">{{ auth()->user()->username }}</h1>
+                    <h1 class="text-3xl md:text-4xl font-bold text-white mb-1">{{ $user->username }}</h1>
                     <p class="text-textMuted text-sm mb-4">Lorem ipsum dolor sit amet consectetur adipisicing elit. Ipsam, veniam optio? Sint, nesciunt pariatur cum tempora neque molestiae quisquam ut quae animi! Dolore incidunt beatae expedita, provident repellat magni fugiat!</p>
 
                     <div class="flex justify-center md:justify-start gap-6 md:gap-10 text-sm">
@@ -83,14 +83,14 @@
     
             <!-- Movie Item -->
             @foreach($watchlist as $watch)
-            <div class="relative group cursor-pointer">
+            <a href="{{ url('/film/'.$watch->movie['id']) }}" class="relative group cursor-pointer block">
                 <div class="relative pb-[150%] rounded overflow-hidden border border-white/10 hover:border-primary transition-colors">
                     <img src="{{ $watch->movie['primaryImage']['url'] }}" class="absolute inset-0 w-full h-full object-cover" />
                     <div class="absolute inset-0 bg-black/60 opacity-0 group-hover:opacity-100 flex items-center justify-center transition-opacity">
                         <span class="text-white font-bold text-sm text-center px-1">{{ $watch->rated->rating ?? 'Not Rated' }} ★</span>
                     </div>
                 </div>
-            </div>
+            </a>
             @endforeach
 
             <!-- Tambahkan item lain disini -->

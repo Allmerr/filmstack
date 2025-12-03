@@ -15,22 +15,22 @@ class ProfileController extends Controller
 {
     public function watched($username)
     {
-        $id_user = \App\Models\User::where('username', $username)->firstOrFail()->id;
-        $watched = Watched::where('users_id', $id_user)->get();
+        $user = \App\Models\User::where('username', $username)->firstOrFail();
+        $watched = Watched::where('users_id', $user->id)->get();
         foreach ($watched as $key => $watch) {
             $response = Http::get("https://api.imdbapi.dev/titles/{$watch->id_films}");
             $watched[$key]->movie = $response->json();
         }
         foreach ($watched as $key => $watch) {
-            $rated = Rated::where('users_id', $id_user)->where('id_films', $watch->id_films)->first();
+            $rated = Rated::where('users_id', $user->id)->where('id_films', $watch->id_films)->first();
             $watched[$key]->rated = $rated;
         }
-
         return view('profile.index', [
-            'reviews' => Review::where('users_id', $id_user)->with('user')->get(),
+            'user' => $user,
+            'reviews' => Review::where('users_id', $user->id)->with('user')->get(),
             'watched' => $watched,
-            'liked' => Liked::where('users_id', $id_user)->with('user')->get(),
-            'watchlist' => Watchlist::where('users_id', $id_user)->with('user')->get(),
+            'liked' => Liked::where('users_id', $user->id)->with('user')->get(),
+            'watchlist' => Watchlist::where('users_id', $user->id)->with('user')->get(),
         ]);
     }
 
