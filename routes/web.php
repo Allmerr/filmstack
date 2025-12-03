@@ -41,6 +41,20 @@ Route::get('/film/{tittleId}', function ($tittleId) {
     ]);
 })->name('film');
 
+Route::get('/search', function () {
+    $query = request('query');
+    $response = Http::get("https://api.imdbapi.dev/search/titles?query={$query}");
+    $data = $response->json(); // Get the JSON response as an array
+    // if $data not available
+    if (!$data || !isset($data['titles'])) {
+        $data = ['titles' => []];
+    }
+
+    return view('search', [
+        'films' => $data['titles']
+    ]);
+})->name('search');
+
 Route::post('reviews', [ReviewController::class, 'store'])->name('reviews.store')->middleware('auth');
 Route::post('watched', [WatchedController::class, 'store'])->name('watched.store')->middleware('auth');
 Route::post('liked', [LikedController::class, 'store'])->name('liked.store')->middleware('auth');
