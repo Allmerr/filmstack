@@ -73,6 +73,7 @@ Route::get('/profile/{username}/liked', [ProfileController::class, 'liked'])->na
 Route::get('/profile/{username}/reviews', [ProfileController::class, 'reviews'])->name('profile.reviews');
 Route::get('/profile/{username}/lists', [ProfileController::class, 'lists'])->name('profile.lists');
 Route::get('/profile/{username}/watchlist', [ProfileController::class, 'watchlist'])->name('profile.watchlist');
+Route::get('/profile/{username}/playlists', [ProfileController::class, 'playlists'])->name('profile.playlists');
 
 Route::post('reviews', [ReviewController::class, 'store'])->name('reviews.store')->middleware('auth');
 Route::post('watched', [WatchedController::class, 'store'])->name('watched.store')->middleware('auth');

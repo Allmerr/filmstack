@@ -34,7 +34,7 @@
               <div class="flex items-between">
                 <input 
                     type="text" 
-                    placeholder="Search films..." 
+                    placeholder="Search films friends and more..." 
                     class="bg-surface text-white text-sm rounded-full px-4 py-2 w-64 focus:outline-none focus:ring-1 focus:ring-primary placeholder-gray-500"
                     name="query"
                     value="{{ request('query') }}"

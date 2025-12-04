@@ -9,6 +9,7 @@ use App\Models\Watched;
 use App\Models\Liked;
 use App\Models\Watchlist;
 use App\Models\Rated;
+use App\Models\Playlist;
 
 
 class ProfileController extends Controller
@@ -33,6 +34,7 @@ class ProfileController extends Controller
             'watched' => $watched,
             'liked' => Liked::where('users_id', $user->id)->with('user')->get(),
             'watchlist' => Watchlist::where('users_id', $user->id)->with('user')->get(),
+            'playlists' => Playlist::where('users_id', $user->id)->with('filmofplaylists')->get(),
         ]);
     }
 
@@ -108,6 +110,29 @@ class ProfileController extends Controller
             'watched' => Watched::where('users_id', $user->id)->with('user')->get(),
             'liked' => Liked::where('users_id', $user->id)->with('user')->get(),
             'watchlist' => $watchlist,
+        ]);
+    }
+
+    public function playlists($username)
+    {
+        $user = \App\Models\User::where('username', $username)->firstOrFail();
+        $playlists = Playlist::where('users_id', $user->id)->with('filmofplaylists')->get();
+        // get film data for each FilmOfPlaylist in the playlists
+        foreach ($playlists as $playlist) {
+            foreach ($playlist->filmofplaylists as $key => $film) {
+                $response = Http::withHeaders([
+                    'Authorization' => 'Bearer eyJhbGciOiJIUzI1NiJ9.eyJhdWQiOiI1MjA5MDZjY2I2MjAyMmI1YTRhYTk0NDNmMzIyZTVjOSIsIm5iZiI6MTc2NDQ4NzgyMS4wMTcsInN1YiI6IjY5MmJmMjhkM2ViYWNhZjQ1OTI0ZjAwNyIsInNjb3BlcyI6WyJhcGlfcmVhZCJdLCJ2ZXJzaW9uIjoxfQ.JfScCkisoJ0WsY70j7B-rjrrHGo7vppce7j2CfcwEs8'
+                ])->get("https://api.themoviedb.org/3/movie/{$film->id_films}");
+                $playlist->filmofplaylists[$key]->poster_path = $response->json()['poster_path'];
+            }
+        }
+        return view('profile.playlists', [
+            'user' => $user,
+            'playlists' => $playlists,
+            'reviews' => Review::where('users_id', $user->id)->with('user')->get(),
+            'watched' => Watched::where('users_id', $user->id)->with('user')->get(),
+            'liked' => Liked::where('users_id', $user->id)->with('user')->get(),
+            'watchlist' => Watchlist::where('users_id', $user->id)->with('user')->get(),
         ]);
     }
 }

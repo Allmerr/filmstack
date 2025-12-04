@@ -55,46 +55,50 @@
     </div>
 
     <!-- Tabs -->
-   <div class="bg-[#14181c] border-b border-gray-800 sticky top-[72px] z-40">
+    <div class="bg-[#14181c] border-b border-gray-800 sticky top-[72px] z-40">
         <div class="max-w-5xl mx-auto px-6 flex gap-8 text-sm font-bold uppercase tracking-widest overflow-x-auto">
+            <button class="py-4 border-b-2 border-transparent text-textMuted hover:text-white transition-colors whitespace-nowrap">
+                <a href="{{ route('profile.watched', ['username' => auth()->user()->username]) }}">Watched</a> <span class="text-xs text-gray-600 ml-1">{{ $watched->count() }}</span>
+            </button>
+            <button class="py-4 border-b-2 border-transparent text-textMuted hover:text-white transition-colors whitespace-nowrap">
+                <a href="{{ route('profile.liked', ['username' => auth()->user()->username]) }}">Likes</a> <span class="text-xs text-gray-600 ml-1">{{$liked->count()}}</span>
+            </button>
+            <button class="py-4 border-b-2 border-transparent text-textMuted hover:text-white transition-colors whitespace-nowrap">
+                <a href="{{ route('profile.reviews', ['username' => auth()->user()->username]) }}">Reviews</a> <span class="text-xs text-gray-600 ml-1">{{$reviews->count()}}</span>
+            </button>
+            <button class="py-4 border-b-2 border-transparent text-textMuted hover:text-white transition-colors whitespace-nowrap">
+                <a href="{{ route('profile.watchlist', ['username' => auth()->user()->username]) }}">Watchlist</a> <span class="text-xs text-gray-600 ml-1">{{$watchlist->count()}}</span>
+            </button>
             <button class="py-4 border-b-2 border-primary text-white transition-colors whitespace-nowrap">
-                <a href="{{ route('profile.watched', ['username' => $user->username]) }}">Watched</a> <span class="text-xs text-gray-600 ml-1">{{ $watched->count() }}</span>
-            </button>
-            <button class="py-4 border-b-2 border-transparent text-textMuted hover:text-white transition-colors whitespace-nowrap">
-                <a href="{{ route('profile.liked', ['username' => $user->username]) }}">Likes</a> <span class="text-xs text-gray-600 ml-1">{{$liked->count()}}</span>
-            </button>
-            <button class="py-4 border-b-2 border-transparent text-textMuted hover:text-white transition-colors whitespace-nowrap">
-                <a href="{{ route('profile.reviews', ['username' => $user->username]) }}">Reviews</a> <span class="text-xs text-gray-600 ml-1">{{$reviews->count()}}</span>
-            </button>
-            <button class="py-4 border-b-2 border-transparent text-textMuted hover:text-white transition-colors whitespace-nowrap">
-                <a href="{{ route('profile.watchlist', ['username' => $user->username]) }}">Watchlist</a> <span class="text-xs text-gray-600 ml-1">{{$watchlist->count()}}</span>
-            </button>
-            <button class="py-4 border-b-2 border-transparent text-textMuted hover:text-white transition-colors whitespace-nowrap">
-                <a href="{{ route('profile.playlists', ['username' => $user->username]) }}">Playlists</a> <span class="text-xs text-gray-600 ml-1">{{$playlists->count()}}</span>
+                <a href="{{ route('profile.playlists', ['username' => auth()->user()->username]) }}">Playlists</a> <span class="text-xs text-gray-600 ml-1">{{$playlists->count()}}</span>
             </button>
         </div>
     </div>
 
-
     <!-- Content -->
     <div class="max-w-5xl mx-auto px-6 py-8">
 
-        <!-- Example Content Grid -->
-        <div class="grid grid-cols-4 sm:grid-cols-5 md:grid-cols-6 lg:grid-cols-8 gap-2">
+        <div class="max-w-5xl mx-auto px-6 py-8">
+                    
+                  <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+                    @foreach($playlists as $playlist)
+                         <div class="bg-[#1f252b] rounded-lg p-4 border border-white/5 hover:border-primary transition-all group cursor-pointer">
+                            <div class="flex -space-x-4 mb-4 h-24 overflow-hidden relative">
+                                @if($playlist->filmofplaylists->count() == 0)
+                                   <div class="w-full h-24 bg-gray-800 rounded flex items-center justify-center text-textMuted text-xs">Empty</div>
+                                @endif
+                                @foreach($playlist->filmofplaylists->take(3) as $film)
+                                  <img src="https://image.tmdb.org/t/p/w500{{ $film->poster_path }}" class="w-16 h-24 object-cover rounded shadow-lg border-2 border-[#1f252b] transform group-hover:scale-105 transition-transform z-10">
+                                @endforeach
+                            </div>
+                            <h3 class="text-white font-bold text-lg group-hover:text-primary transition-colors">{{ $playlist->name }}</h3>
+                            <p class="text-textMuted text-xs uppercase tracking-wider">{{ $playlist->filmofplaylists->count() }} Films</p>
+                         </div>
+                    @endforeach
 
-            <!-- Movie Item -->
-            @foreach($watched as $watch)
-            <a href="{{ url('/film/'.$watch->movie['id']) }}" class="relative group cursor-pointer block">
-                <div class="relative pb-[150%] rounded overflow-hidden border border-white/10 hover:border-primary transition-colors">
-                    <img src="https://image.tmdb.org/t/p/w500/{{ $watch->movie['poster_path'] }}" class="absolute inset-0 w-full h-full object-cover" />
-                    <div class="absolute inset-0 bg-black/60 opacity-0 group-hover:opacity-100 flex items-center justify-center transition-opacity">
-                        <span class="text-white font-bold text-sm text-center px-1">{{ $watch->rated->rating ?? 'Not Rated' }} ★</span>
-                    </div>
+                  </div>
+                
                 </div>
-            </a>
-            @endforeach
-
-            <!-- Tambahkan item lain disini -->
 
         </div>
 
