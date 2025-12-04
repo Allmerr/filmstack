@@ -85,7 +85,7 @@
             @foreach($reviews as $watch)
             <a href="{{ url('/film/'.$watch->movie['id']) }}" class="relative group cursor-pointer block">
                 <div class="relative pb-[150%] rounded overflow-hidden border border-white/10 hover:border-primary transition-colors">
-                    <img src="{{ $watch->movie['primaryImage']['url'] }}" class="absolute inset-0 w-full h-full object-cover" />
+                    <img src="https://image.tmdb.org/t/p/w500/{{ $watch->movie['poster_path'] }}" class="absolute inset-0 w-full h-full object-cover" />
                     <div class="absolute inset-0 bg-black/60 opacity-0 group-hover:opacity-100 flex items-center justify-center transition-opacity">
                         <span class="text-white font-bold text-sm text-center px-1">{{ $watch->rated->rating ?? 'Not Rated' }} ★</span>
                     </div>

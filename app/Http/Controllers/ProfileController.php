@@ -18,7 +18,9 @@ class ProfileController extends Controller
         $user = \App\Models\User::where('username', $username)->firstOrFail();
         $watched = Watched::where('users_id', $user->id)->get();
         foreach ($watched as $key => $watch) {
-            $response = Http::get("https://api.imdbapi.dev/titles/{$watch->id_films}");
+            $response = Http::withHeaders([
+                'Authorization' => 'Bearer eyJhbGciOiJIUzI1NiJ9.eyJhdWQiOiI1MjA5MDZjY2I2MjAyMmI1YTRhYTk0NDNmMzIyZTVjOSIsIm5iZiI6MTc2NDQ4NzgyMS4wMTcsInN1YiI6IjY5MmJmMjhkM2ViYWNhZjQ1OTI0ZjAwNyIsInNjb3BlcyI6WyJhcGlfcmVhZCJdLCJ2ZXJzaW9uIjoxfQ.JfScCkisoJ0WsY70j7B-rjrrHGo7vppce7j2CfcwEs8'
+            ])->get("https://api.themoviedb.org/3/movie/{$watch->id_films}");
             $watched[$key]->movie = $response->json();
         }
         foreach ($watched as $key => $watch) {
@@ -39,14 +41,15 @@ class ProfileController extends Controller
         $user = \App\Models\User::where('username', $username)->firstOrFail();
         $liked = Liked::where('users_id', $user->id)->get();
         foreach ($liked as $key => $like) {
-            $response = Http::get("https://api.imdbapi.dev/titles/{$like->id_films}");
+            $response = Http::withHeaders([
+                'Authorization' => 'Bearer eyJhbGciOiJIUzI1NiJ9.eyJhdWQiOiI1MjA5MDZjY2I2MjAyMmI1YTRhYTk0NDNmMzIyZTVjOSIsIm5iZiI6MTc2NDQ4NzgyMS4wMTcsInN1YiI6IjY5MmJmMjhkM2ViYWNhZjQ1OTI0ZjAwNyIsInNjb3BlcyI6WyJhcGlfcmVhZCJdLCJ2ZXJzaW9uIjoxfQ.JfScCkisoJ0WsY70j7B-rjrrHGo7vppce7j2CfcwEs8'
+            ])->get("https://api.themoviedb.org/3/movie/{$like->id_films}");
             $liked[$key]->movie = $response->json();
         }
         foreach ($liked as $key => $like) {
             $rated = Rated::where('users_id', $user->id)->where('id_films', $like->id_films)->first();
             $liked[$key]->rated = $rated;
         }
-
 
         return view('profile.liked', [
             'user' => $user,
@@ -62,7 +65,10 @@ class ProfileController extends Controller
         $user = \App\Models\User::where('username', $username)->firstOrFail();
         $review = Review::where('users_id', $user->id)->get();
         foreach ($review as $key => $like) {
-            $response = Http::get("https://api.imdbapi.dev/titles/{$like->id_films}");
+            
+            $response = Http::withHeaders([
+                'Authorization' => 'Bearer eyJhbGciOiJIUzI1NiJ9.eyJhdWQiOiI1MjA5MDZjY2I2MjAyMmI1YTRhYTk0NDNmMzIyZTVjOSIsIm5iZiI6MTc2NDQ4NzgyMS4wMTcsInN1YiI6IjY5MmJmMjhkM2ViYWNhZjQ1OTI0ZjAwNyIsInNjb3BlcyI6WyJhcGlfcmVhZCJdLCJ2ZXJzaW9uIjoxfQ.JfScCkisoJ0WsY70j7B-rjrrHGo7vppce7j2CfcwEs8'
+            ])->get("https://api.themoviedb.org/3/movie/{$like->id_films}");
             $review[$key]->movie = $response->json();
         }
         foreach ($review as $key => $like) {
@@ -85,7 +91,9 @@ class ProfileController extends Controller
         $user = \App\Models\User::where('username', $username)->firstOrFail();
         $watchlist = Watchlist::where('users_id', $user->id)->get();
         foreach ($watchlist as $key => $like) {
-            $response = Http::get("https://api.imdbapi.dev/titles/{$like->id_films}");
+            $response = Http::withHeaders([
+                'Authorization' => 'Bearer eyJhbGciOiJIUzI1NiJ9.eyJhdWQiOiI1MjA5MDZjY2I2MjAyMmI1YTRhYTk0NDNmMzIyZTVjOSIsIm5iZiI6MTc2NDQ4NzgyMS4wMTcsInN1YiI6IjY5MmJmMjhkM2ViYWNhZjQ1OTI0ZjAwNyIsInNjb3BlcyI6WyJhcGlfcmVhZCJdLCJ2ZXJzaW9uIjoxfQ.JfScCkisoJ0WsY70j7B-rjrrHGo7vppce7j2CfcwEs8'
+            ])->get("https://api.themoviedb.org/3/movie/{$like->id_films}");
             $watchlist[$key]->movie = $response->json();
         }
         foreach ($watchlist as $key => $like) {

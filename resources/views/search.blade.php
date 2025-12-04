@@ -22,13 +22,13 @@
         </div>
         <div id="movie-grid" class="grid grid-cols-3 sm:grid-cols-4 md:grid-cols-6 gap-3 md:gap-4">
           <!-- Skeletons (Loading State) -->
-          @foreach ($films as $key => $d)
-          <a href="/film/{{ $d['id'] ?? $key }}" class="movie-card group relative flex-shrink-0 cursor-pointer w-full block no-underline" aria-label="{{ $d['primaryTitle'] ?? 'View movie' }}">
+          @foreach ($films as $key => $film)
+          <a href="/film/{{ $film['id'] ?? $key }}" class="movie-card group relative flex-shrink-0 cursor-pointer w-full block no-underline" aria-label="{{ $film['original_title'] ?? 'View movie' }}">
             <div class="relative w-full pb-[150%] overflow-hidden rounded-md shadow-lg border border-white/10 transition-all duration-300 hover:ring-2 hover:ring-primary hover:shadow-primary/20">
               
               <img 
-                src="{{ $d['primaryImage']['url'] ?? '' }}" 
-                alt="${movie.title}"
+                src=" https://image.tmdb.org/t/p/w500/{{ $film['poster_path'] ?? '' }}" 
+                alt="{{ $film['original_title'] ?? '' }}"
                 class="poster-img absolute inset-0 w-full h-full object-cover transition-transform duration-500"
                 loading="lazy"
               />
@@ -40,15 +40,15 @@
                         <path d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z"/>
                       </svg>
                     </span>
-                    <p class="text-white font-bold text-lg leading-tight mb-1">{{ $d['rating']['aggregateRating'] ?? ''}} - {{ $d['rating']['voteCount'] ?? ''}}</p>
+                    <p class="text-white font-bold text-lg leading-tight mb-1">{{ $film['vote_average'] ?? ''}} - {{ $film['vote_count'] ?? ''}}</p>
                     <p class="text-textMuted text-xs uppercase tracking-wider mb-3">Rating</p>
                   </div>
               </div>
             </div>
             
             <div class="mt-2 hidden group-hover:block absolute top-full left-0 w-full z-20 bg-darker p-2 rounded shadow-xl border border-gray-800">
-              <h3 class="text-white font-bold text-sm truncate">{{ $d['primaryTitle'] ?? '' }}</h3>
-              <p class="text-textMuted text-xs">{{ $d['startYear'] ?? '' }}</p>
+              <h3 class="text-white font-bold text-sm truncate">{{ $film['original_title'] ?? '' }}</h3>
+              <p class="text-textMuted text-xs">{{ $film['release_date'] ?? '' }}</p>
             </div>
           </a>    
           @endforeach

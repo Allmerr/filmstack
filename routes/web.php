@@ -19,20 +19,21 @@ use App\Models\Watchlist;
 use App\Models\Rated;
 
 Route::get('/', function () {
-    $response = Http::get('https://api.imdbapi.dev/titles');
+    // Add a custom HTTP response header
+    $response = Http::withHeaders([
+        'Authorization' => 'Bearer eyJhbGciOiJIUzI1NiJ9.eyJhdWQiOiI1MjA5MDZjY2I2MjAyMmI1YTRhYTk0NDNmMzIyZTVjOSIsIm5iZiI6MTc2NDQ4NzgyMS4wMTcsInN1YiI6IjY5MmJmMjhkM2ViYWNhZjQ1OTI0ZjAwNyIsInNjb3BlcyI6WyJhcGlfcmVhZCJdLCJ2ZXJzaW9uIjoxfQ.JfScCkisoJ0WsY70j7B-rjrrHGo7vppce7j2CfcwEs8'
+    ])->get('https://api.themoviedb.org/3/discover/movie?include_adult=false&include_video=false&language=en-US&page=1&sort_by=popularity.desc');
     $data = $response->json(); // Get the JSON response as an array
     // if $data not available
-    if (!$data || !isset($data['titles'])) {
-        $data = ['titles' => []];
-    }
-
     return view('welcome', [
-        'data' => array_slice($data['titles'], 0, 20)
+        'films' => $data['results'] ?? []
     ]);
 })->name('welcome');
 
 Route::get('/film/{tittleId}', function ($tittleId) {
-    $response = Http::get("https://api.imdbapi.dev/titles/{$tittleId}");
+     $response = Http::withHeaders([
+        'Authorization' => 'Bearer eyJhbGciOiJIUzI1NiJ9.eyJhdWQiOiI1MjA5MDZjY2I2MjAyMmI1YTRhYTk0NDNmMzIyZTVjOSIsIm5iZiI6MTc2NDQ4NzgyMS4wMTcsInN1YiI6IjY5MmJmMjhkM2ViYWNhZjQ1OTI0ZjAwNyIsInNjb3BlcyI6WyJhcGlfcmVhZCJdLCJ2ZXJzaW9uIjoxfQ.JfScCkisoJ0WsY70j7B-rjrrHGo7vppce7j2CfcwEs8'
+    ])->get("https://api.themoviedb.org/3/movie/{$tittleId}");
 
     return view('film', [
         'data' => $response->json(),
@@ -47,15 +48,18 @@ Route::get('/film/{tittleId}', function ($tittleId) {
 
 Route::get('/search', function () {
     $query = request('query');
-    $response = Http::get("https://api.imdbapi.dev/search/titles?query={$query}");
+    $response = Http::withHeaders([
+        'Authorization' => 'Bearer eyJhbGciOiJIUzI1NiJ9.eyJhdWQiOiI1MjA5MDZjY2I2MjAyMmI1YTRhYTk0NDNmMzIyZTVjOSIsIm5iZiI6MTc2NDQ4NzgyMS4wMTcsInN1YiI6IjY5MmJmMjhkM2ViYWNhZjQ1OTI0ZjAwNyIsInNjb3BlcyI6WyJhcGlfcmVhZCJdLCJ2ZXJzaW9uIjoxfQ.JfScCkisoJ0WsY70j7B-rjrrHGo7vppce7j2CfcwEs8'
+    ])->get("https://api.themoviedb.org/3/search/movie?query={$query}&include_adult=false&language=en-US&page=1");
+    
     $data = $response->json(); // Get the JSON response as an array
     // if $data not available
-    if (!$data || !isset($data['titles'])) {
-        $data = ['titles' => []];
+    if (!$data || !isset($data['results'])) {
+        $data = ['results' => []];
     }
 
     return view('search', [
-        'films' => $data['titles']
+        'films' => $data['results']
     ]);
 })->name('search');
 

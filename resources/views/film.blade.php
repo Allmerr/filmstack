@@ -5,7 +5,7 @@
      <div class="fade-in bg-dark min-h-screen pb-20">
           <!-- Cinematic Backdrop -->
           <div class="relative w-full h-[50vh] overflow-hidden">
-            <div class="absolute inset-0 bg-cover bg-center" style="background-image: url('{{ $data['primaryImage']['url'] ?? '' }}');"></div>
+            <div class="absolute inset-0 bg-cover bg-center" style="background-image: url('https://image.tmdb.org/t/p/original/{{ $data['poster_path'] ?? '' }}');"></div>
             <!-- Gradient Overlays -->
             <div class="absolute inset-0 bg-gradient-to-t from-dark via-dark/80 to-transparent"></div>
             <div class="absolute inset-0 bg-gradient-to-r from-dark via-dark/40 to-transparent"></div>
@@ -18,19 +18,17 @@
               <!-- Left: Poster -->
               <div class=" w-48 md:w-64 mx-auto md:mx-0">
                 <div class="rounded-lg overflow-hidden shadow-2xl ring-1 ring-white/10 group">
-                  <img src="{{ $data['primaryImage']['url'] ?? '' }}" alt="{{ $data['titleText']['text'] ?? '' }}" class="w-full h-auto object-cover transform group-hover:scale-105 transition-transform duration-700"/>
+                  <img src="https://image.tmdb.org/t/p/w500/{{ $data['poster_path'] ?? '' }}" alt="{{ $data['original_title'] ?? '' }}" class="w-full h-auto object-cover transform group-hover:scale-105 transition-transform duration-700"/>
                 </div>
               </div>
 
               <!-- Right: Details -->
               <div class="flex-grow pt-4 md:pt-12 text-center md:text-left">
-                <h1 class="text-4xl md:text-5xl font-extrabold text-white mb-2 leading-tight drop-shadow-lg tracking-tight font-serif">{{ $data['primaryTitle'] ?? '' }}</h1>
+                <h1 class="text-4xl md:text-5xl font-extrabold text-white mb-2 leading-tight drop-shadow-lg tracking-tight font-serif">{{ $data['original_title'] ?? '' }}</h1>
                 
                 <div class="flex flex-wrap items-center justify-center md:justify-start gap-3 text-sm text-textMuted mb-6 font-medium tracking-wide">
-                  <span class="text-white">{{ $data['releaseYear'] ?? '' }}</span>
-                  <span>{{ $data['startYear'] ?? '' }}</span>
-                  <span>•</span>
-                  <span>{{ $data['directors'][0]['displayName'] ?? '' }}</span>
+                  <span class="text-white">{{ $data['release_date'] ?? '' }}</span>
+                  <span>{{ $data['release_date'] ?? '' }}</span>
                 </div>
 
                 <!-- Action Bar (Glassmorphism) -->
@@ -145,7 +143,7 @@
                   <!-- Plot -->
                   <h3 class="text-textMuted uppercase text-xs font-bold tracking-widest mb-2 border-b border-gray-800 pb-2 inline-block ">Plot Summary</h3>
                   <p class="text-lg leading-relaxed text-[#99aabb] font-serif max-w-2xl mx-auto md:mx-0">
-                    {{ $data['plot'] ?? 'No plot summary available.' }}
+                    {{ $data['overview'] ?? 'No plot summary available.' }}
                   </p>
                 </div>
 
@@ -153,37 +151,13 @@
                  <div class="mt-6 flex flex-wrap justify-center md:justify-start gap-2">
                   @foreach ($data['genres'] as $genre)
                     <span class="px-3 py-1 rounded-full bg-[#2c3440] text-xs text-textLight font-medium border border-white/5 hover:bg-gray-700 cursor-pointer transition-colors">
-                      {{ $genre }}
+                      {{ $genre['name'] }}
                     </span>
                   @endforeach
                  </div>
               </div>
             </div>
 
-            <!-- Cast & Tabs Placeholder -->
-            <div class="mt-16 border-t border-gray-800 pt-8">
-               <div class="flex gap-8 mb-6 border-b border-gray-800 text-sm font-bold uppercase tracking-widest">
-                  <button class="pb-3 border-b-2 border-primary text-white">Cast</button>
-                  <button class="pb-3 border-b-2 border-transparent text-textMuted hover:text-white transition-colors">Crew</button>
-                  <button class="pb-3 border-b-2 border-transparent text-textMuted hover:text-white transition-colors">Details</button>
-               </div>
-               
-               <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-6 gap-4">
-                  
-                  @foreach ($data['writers'] as $i)
-                    <div class="flex items-center gap-3 bg-[#1f252b] p-2 rounded border border-white/5">
-                       <div class="w-10 h-10 bg-gray-700 rounded-full flex-shrink-0">
-                          <img src="{{ $i['primaryImage']['url'] ?? '' }}" alt="" class="w-full h-full object-cover rounded-full"/>
-                       </div>
-                       <div class="overflow-hidden">
-                          <p class="text-white text-xs font-bold truncate">{{ $i['displayName'] }}</p>
-                       </div>
-                    </div>
-                  @endforeach
-               </div>
-            </div>
-<!-- 
-          -->
 
               <div class="mt-12">
                 <div class="flex items-center justify-between mb-6">
