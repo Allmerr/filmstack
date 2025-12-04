@@ -69,7 +69,7 @@
                     />
                     <div class="flex-1 min-w-0">
                       <p class="text-white font-semibold text-sm truncate">{{ $user['username'] ?? 'Unknown' }}</p>
-                      @if(Auth::check() && Auth::user()->username !== $user['username'])
+                      @if(auth()->check() && auth()->user()->username !== $user['username'])
                         <form method="POST" action="{{ route('following.store') }}" class="mt-1">
                           <input type="hidden" name="following_to_users_id" value="{{ $user['id'] }}">
                           @csrf
