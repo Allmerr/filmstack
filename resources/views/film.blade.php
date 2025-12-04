@@ -26,10 +26,15 @@
               <div class="flex-grow pt-4 md:pt-12 text-center md:text-left">
                 <h1 class="text-4xl md:text-5xl font-extrabold text-white mb-2 leading-tight drop-shadow-lg tracking-tight font-serif">{{ $data['original_title'] ?? '' }}</h1>
                 
-                <div class="flex flex-wrap items-center justify-center md:justify-start gap-3 text-sm text-textMuted mb-6 font-medium tracking-wide">
-                  <span class="text-white">{{ $data['release_date'] ?? '' }}</span>
-                  <span>{{ $data['release_date'] ?? '' }}</span>
-                </div>
+                        <div class="flex flex-wrap items-center justify-center md:justify-start gap-3 text-sm text-textMuted mb-6 font-medium tracking-wide">
+                           <span class="text-white">{{ $data['release_date'] ?? '' }}</span>
+                           <span>{{ $data['release_date'] ?? '' }}</span>
+                           <!-- Local rating (fallback to API if none) -->
+                           <div class="flex items-center gap-2 ml-2">
+                              <span class="text-primary font-bold">{{ isset($avg_rating) && $avg_rating !== null ? $avg_rating : ($data['vote_average'] ?? '—') }}</span>
+                              <span class="text-textMuted text-xs">({{ $rating_count ?? ($data['vote_count'] ?? 0) }} ratings)</span>
+                           </div>
+                        </div>
 
                 <!-- Action Bar (Glassmorphism) -->
                 <div class="bg-[#1f252b]/60 backdrop-blur-md border border-white/5 rounded-xl p-4 mb-8 inline-flex flex-col sm:flex-row items-center gap-4 shadow-xl">

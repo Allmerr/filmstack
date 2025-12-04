@@ -79,7 +79,10 @@
                         <path d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z"/>
                       </svg>
                     </span>
-                    <p class="text-white font-bold text-lg leading-tight mb-1">{{ $film['vote_average'] ?? ''}} - {{ $film['vote_count'] ?? ''}}</p>
+                    @php
+                      $local = isset($localRatings) && isset($film['id']) ? ($localRatings[$film['id']] ?? null) : null;
+                    @endphp
+                    <p class="text-white font-bold text-lg leading-tight mb-1">{{ $local ? $local['avg'] : ($film['vote_average'] ?? '') }} - {{ $local ? $local['count'] : ($film['vote_count'] ?? '') }}</p>
                     <p class="text-textMuted text-xs uppercase tracking-wider mb-3">Rating</p>
                   </div>
               </div>
