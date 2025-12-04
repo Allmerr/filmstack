@@ -82,20 +82,36 @@
         
         <!-- Mobile Search -->
         <div class="mb-8">
-             <input 
-                type="text" 
-                placeholder="Search films..." 
-                class="bg-surface text-white text-lg rounded-md px-4 py-3 w-full focus:outline-none focus:ring-1 focus:ring-primary placeholder-gray-500"
-              />
+             <form action="{{ route('search') }}" method="get">
+                <input 
+                    type="text" 
+                    placeholder="Search films..." 
+                    class="bg-surface text-white text-lg rounded-md px-4 py-3 w-full focus:outline-none focus:ring-1 focus:ring-primary placeholder-gray-500"
+                    name="query"
+                    value="{{ request('query') }}"
+                />
+                <button type="submit" class="hidden absolute inset-y-0 left-0 pl-3 flex items-center text-gray-400 hover:text-white focus:outline-none" aria-label="Search">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-4.35-4.35M11 19a8 8 0 1 0 0-16 8 8 0 0 0 0 16z"/>
+                    </svg>
+                  </button>
+             </form>
         </div>
 
         <nav class="flex flex-col gap-6 text-xl font-bold text-textMuted">
-            <a href="#" class="hover:text-primary transition-colors flex items-center justify-between border-b border-gray-800 pb-2">
+            @guest
+            <a href="{{ route('login') }}" class="hover:text-primary transition-colors flex items-center justify-between border-b border-gray-800 pb-2">
                 Sign In <span>&rarr;</span>
             </a>
-            <a href="#" class="hover:text-primary transition-colors flex items-center justify-between border-b border-gray-800 pb-2">
+            <a href="{{ route('register') }}" class="hover:text-primary transition-colors flex items-center justify-between border-b border-gray-800 pb-2">
                 Create Account <span>&rarr;</span>
             </a>
+            @endguest
+            @auth
+            <a href="{{ route('profile.watched', ['username' => auth()->user()->username]) }}" class="hover:text-primary transition-colors flex items-center justify-between border-b border-gray-800 pb-2">
+                Profile <span>&rarr;</span>
+            </a>
+            @endauth
             <a href="#" class="hover:text-primary transition-colors flex items-center justify-between border-b border-gray-800 pb-2">
                 Films
             </a>
@@ -105,8 +121,10 @@
             <a href="#" class="hover:text-primary transition-colors flex items-center justify-between border-b border-gray-800 pb-2">
                 Members
             </a>
+            @auth
             <a href="#" class="hover:text-primary transition-colors flex items-center justify-between border-b border-gray-800 pb-2">
                 Journal
             </a>
+            @endauth
         </nav>
     </div>  
