@@ -90,12 +90,19 @@
         </div>
 
         <nav class="flex flex-col gap-6 text-xl font-bold text-textMuted">
-            <a href="#" class="hover:text-primary transition-colors flex items-center justify-between border-b border-gray-800 pb-2">
+            @guest
+            <a href="{{ route('login') }}" class="hover:text-primary transition-colors flex items-center justify-between border-b border-gray-800 pb-2">
                 Sign In <span>&rarr;</span>
             </a>
-            <a href="#" class="hover:text-primary transition-colors flex items-center justify-between border-b border-gray-800 pb-2">
+            <a href="{{ route('register') }}" class="hover:text-primary transition-colors flex items-center justify-between border-b border-gray-800 pb-2">
                 Create Account <span>&rarr;</span>
             </a>
+            @endguest
+            @auth
+            <a href="{{ route('profile.watched', ['username' => auth()->user()->username]) }}" class="hover:text-primary transition-colors flex items-center justify-between border-b border-gray-800 pb-2">
+                Profile <span>&rarr;</span>
+            </a>
+            @endauth
             <a href="#" class="hover:text-primary transition-colors flex items-center justify-between border-b border-gray-800 pb-2">
                 Films
             </a>
@@ -105,8 +112,10 @@
             <a href="#" class="hover:text-primary transition-colors flex items-center justify-between border-b border-gray-800 pb-2">
                 Members
             </a>
+            @auth
             <a href="#" class="hover:text-primary transition-colors flex items-center justify-between border-b border-gray-800 pb-2">
                 Journal
             </a>
+            @endauth
         </nav>
     </div>  
