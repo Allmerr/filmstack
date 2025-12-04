@@ -17,6 +17,7 @@ use App\Models\Watched;
 use App\Models\Liked;
 use App\Models\Watchlist;
 use App\Models\Rated;
+use App\Models\FilmOfPlaylist;
 
 Route::get('/', function () {
     // Add a custom HTTP response header
@@ -42,6 +43,7 @@ Route::get('/film/{tittleId}', function ($tittleId) {
         'watched' => Watched::where('id_films', $tittleId)->with('user')->get(),
         'liked' => Liked::where('id_films', $tittleId)->with('user')->get(),
         'watchlist' => Watchlist::where('id_films', $tittleId)->with('user')->get(),
+        'filmOfPlaylists' => FilmOfPlaylist::where('id_films', $tittleId)->with('user')->get(),
         'rated' => Rated::where('id_films', $tittleId)->with('user')->get(),
     ]);
 })->name('film');

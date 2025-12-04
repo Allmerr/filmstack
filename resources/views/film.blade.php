@@ -242,9 +242,14 @@
                                        </div>
                                        <div id="check-{{ $pl->id }}" class="w-6 h-6 rounded-full border border-gray-600 flex items-center justify-center transition-colors">
                                           <!-- optional: server can return whether movie is already in playlist and you can render the check SVG conditionally here -->
-                                          <svg class="w-4 h-4 text-darker font-bold" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M5 13l4 4L19 7"></path>
-                                          </svg>
+
+                                          @php 
+                                             $inList = $pl->filmofplaylists->contains('id_films', $data['id']);
+                                          @endphp
+                                           <div id="check-{{ $pl->id }}" class="w-6 h-6 rounded-full border border-gray-600 flex items-center justify-center {{ $inList ? 'bg-primary border-primary' : '' }} transition-colors">
+                                              @if($inList)
+                                                <svg class="w-4 h-4 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg>
+                                             @endif   
                                        </div>
                                     </button>
                                  </form>
