@@ -154,4 +154,40 @@ class ProfileController extends Controller
             'playlists' => Playlist::where('users_id', $user->id)->with('filmofplaylists')->get(),
         ]);
     }
+
+    public function update(Request $request, $username)
+    {
+        $user = \App\Models\User::where('username', $username)->firstOrFail();
+        if ($request->file('avatar')) {
+            $rules['avatar'] = 'required|image|mimes:jpeg,png,jpg';
+        }
+        // Ensure the authenticated user is the owner of the profile
+        if (auth()->id() !== $user->id) {
+            abort(403, 'Unauthorized action.');
+        }
+        
+        // Validate the request data
+        $validatedData = $request->validate([
+            'username' => 'required|string|max:50|unique:users,username,' . $user->id,
+            'bio' => 'nullable|string|max:500',
+        ]);
+        
+        if ($request->hasFile('avatar')) {
+            // Hapus foto lama jika ada
+            if ($user->avatar) {
+                \Illuminate\Support\Facades\Storage::delete('profile/' . $user->avatar, 'public');
+            }
+            
+            // Simpan foto baru dan simpan nama file di database
+            $avatarPath = $request->file('avatar')->store('profile', 'public');
+            $user->update([
+                'avatar' => str_replace('profile/', '', $avatarPath)
+            ]);
+        }
+
+        // Update user profile
+        $user->update($validatedData);
+        
+        return redirect()->route('profile.watched', ['username' => $user->username])->with('success', 'Profile updated successfully.');
+    }
 }

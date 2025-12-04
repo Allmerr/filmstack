@@ -100,6 +100,7 @@ Route::get('/profile/{username}/lists', [ProfileController::class, 'lists'])->na
 Route::get('/profile/{username}/watchlist', [ProfileController::class, 'watchlist'])->name('profile.watchlist');
 Route::get('/profile/{username}/playlists', [ProfileController::class, 'playlists'])->name('profile.playlists');
 Route::get('/profile/{username}/followers', [ProfileController::class, 'followers'])->name('profile.followers');
+Route::post('/profile/{username}', [ProfileController::class, 'update'])->name('profile.update')->middleware('auth');
 
 Route::post('reviews', [ReviewController::class, 'store'])->name('reviews.store')->middleware('auth');
 Route::post('watched', [WatchedController::class, 'store'])->name('watched.store')->middleware('auth');
