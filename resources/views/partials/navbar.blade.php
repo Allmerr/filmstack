@@ -117,13 +117,5 @@
             <a href="#" class="hover:text-primary transition-colors flex items-center justify-between border-b border-gray-800 pb-2">
                 Lists
             </a>
-            <a href="#" class="hover:text-primary transition-colors flex items-center justify-between border-b border-gray-800 pb-2">
-                Members
-            </a>
-            @auth
-            <a href="#" class="hover:text-primary transition-colors flex items-center justify-between border-b border-gray-800 pb-2">
-                Journal
-            </a>
-            @endauth
         </nav>
     </div>  

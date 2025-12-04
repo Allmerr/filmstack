@@ -22,25 +22,68 @@ use App\Models\FilmOfPlaylist;
 use App\Models\User;
 
 Route::get('/', function () {
+    // Get page from query, default to 1
+    $page = request('page', 1);
+
     // Add a custom HTTP response header
     $response = Http::withHeaders([
         'Authorization' => 'Bearer eyJhbGciOiJIUzI1NiJ9.eyJhdWQiOiI1MjA5MDZjY2I2MjAyMmI1YTRhYTk0NDNmMzIyZTVjOSIsIm5iZiI6MTc2NDQ4NzgyMS4wMTcsInN1YiI6IjY5MmJmMjhkM2ViYWNhZjQ1OTI0ZjAwNyIsInNjb3BlcyI6WyJhcGlfcmVhZCJdLCJ2ZXJzaW9uIjoxfQ.JfScCkisoJ0WsY70j7B-rjrrHGo7vppce7j2CfcwEs8'
-    ])->get('https://api.themoviedb.org/3/discover/movie?include_adult=false&include_video=false&language=en-US&page=1&sort_by=popularity.desc');
+    ])->get("https://api.themoviedb.org/3/discover/movie?include_adult=false&include_video=false&language=en-US&page={$page}&sort_by=popularity.desc");
     $data = $response->json(); // Get the JSON response as an array
-    // if $data not available
+
+    $films = $data['results'] ?? [];
+    $totalPages = $data['total_pages'] ?? 1;
+
+    // Prepare local ratings map for these films
+    $filmIds = array_values(array_filter(array_map(function($f){ return $f['id'] ?? null; }, $films)));
+    $localRatings = [];
+    if (!empty($filmIds)) {
+        $grouped = Rated::whereIn('id_films', $filmIds)->get()->groupBy('id_films');
+        foreach ($grouped as $id => $collection) {
+            $count = $collection->count();
+            $avg = round($collection->avg(function($r){ return (int) $r->rating; }), 1);
+            $localRatings[$id] = ['avg' => $avg, 'count' => $count];
+        }
+    }
+
     return view('welcome', [
-        'films' => $data['results'] ?? []
+        'films' => $films,
+        'localRatings' => $localRatings,
+        'currentPage' => $page,
+        'totalPages' => $totalPages,
     ]);
 })->name('welcome');
 
 Route::get('/discover', function () {
+    // Get page from query, default to 1
+    $page = request('page', 1);
+
     // Add a custom HTTP response header
     $response = Http::withHeaders([
         'Authorization' => 'Bearer eyJhbGciOiJIUzI1NiJ9.eyJhdWQiOiI1MjA5MDZjY2I2MjAyMmI1YTRhYTk0NDNmMzIyZTVjOSIsIm5iZiI6MTc2NDQ4NzgyMS4wMTcsInN1YiI6IjY5MmJmMjhkM2ViYWNhZjQ1OTI0ZjAwNyIsInNjb3BlcyI6WyJhcGlfcmVhZCJdLCJ2ZXJzaW9uIjoxfQ.JfScCkisoJ0WsY70j7B-rjrrHGo7vppce7j2CfcwEs8'
-    ])->get('https://api.themoviedb.org/3/discover/movie?include_adult=false&include_video=false&language=en-US&page=1&sort_by=popularity.desc');
+    ])->get("https://api.themoviedb.org/3/discover/movie?include_adult=false&include_video=false&language=en-US&page={$page}&sort_by=popularity.desc");
     $data = $response->json(); // Get the JSON response as an array
+
+    $films = $data['results'] ?? [];
+    $totalPages = $data['total_pages'] ?? 1;
+
+    // Prepare local ratings map for these films
+    $filmIds = array_values(array_filter(array_map(function($f){ return $f['id'] ?? null; }, $films)));
+    $localRatings = [];
+    if (!empty($filmIds)) {
+        $grouped = Rated::whereIn('id_films', $filmIds)->get()->groupBy('id_films');
+        foreach ($grouped as $id => $collection) {
+            $count = $collection->count();
+            $avg = round($collection->avg(function($r){ return (int) $r->rating; }), 1);
+            $localRatings[$id] = ['avg' => $avg, 'count' => $count];
+        }
+    }
+
     return view('discover', [
-        'films' => $data['results'] ?? []
+        'films' => $films,
+        'localRatings' => $localRatings,
+        'currentPage' => $page,
+        'totalPages' => $totalPages,
     ]);
 })->name('discover');
 
@@ -49,15 +92,29 @@ Route::get('/film/{tittleId}', function ($tittleId) {
         'Authorization' => 'Bearer eyJhbGciOiJIUzI1NiJ9.eyJhdWQiOiI1MjA5MDZjY2I2MjAyMmI1YTRhYTk0NDNmMzIyZTVjOSIsIm5iZiI6MTc2NDQ4NzgyMS4wMTcsInN1YiI6IjY5MmJmMjhkM2ViYWNhZjQ1OTI0ZjAwNyIsInNjb3BlcyI6WyJhcGlfcmVhZCJdLCJ2ZXJzaW9uIjoxfQ.JfScCkisoJ0WsY70j7B-rjrrHGo7vppce7j2CfcwEs8'
     ])->get("https://api.themoviedb.org/3/movie/{$tittleId}");
 
+    // API response
+    $data = $response->json();
+
+    // Local ratings
+    $ratedQuery = Rated::where('id_films', $tittleId)->with('user');
+    $rated = $ratedQuery->get();
+    $ratingCount = $ratedQuery->count();
+    $avgRating = null;
+    if ($ratingCount > 0) {
+        $avgRating = round($rated->avg(function($r){ return (int) $r->rating; }), 1);
+    }
+
     return view('film', [
-        'data' => $response->json(),
+        'data' => $data,
         'playlists' => auth()->check() ? auth()->user()->playlists : [],
         'reviews' => Review::where('id_films', $tittleId)->with('user')->get(),
         'watched' => Watched::where('id_films', $tittleId)->with('user')->get(),
         'liked' => Liked::where('id_films', $tittleId)->with('user')->get(),
         'watchlist' => Watchlist::where('id_films', $tittleId)->with('user')->get(),
         'filmOfPlaylists' => FilmOfPlaylist::where('id_films', $tittleId)->with('user')->get(),
-        'rated' => Rated::where('id_films', $tittleId)->with('user')->get(),
+        'rated' => $rated,
+        'rating_count' => $ratingCount,
+        'avg_rating' => $avgRating,
     ]);
 })->name('film');
 
