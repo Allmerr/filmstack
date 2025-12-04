@@ -12,12 +12,14 @@ use App\Http\Controllers\WatchlistController;
 use App\Http\Controllers\RatedController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\PlaylistController;
+use App\Http\Controllers\FollowerController;
 use App\Models\Review;
 use App\Models\Watched;
 use App\Models\Liked;
 use App\Models\Watchlist;
 use App\Models\Rated;
 use App\Models\FilmOfPlaylist;
+use App\Models\User;
 
 Route::get('/', function () {
     // Add a custom HTTP response header
@@ -60,10 +62,22 @@ Route::get('/search', function () {
         $data = ['results' => []];
     }
 
+    $users = User::where('username', 'like', "%{$query}%")->get();
+    foreach ($users as $user) {
+        if($user->followers()->where('users_id', auth()->id())->exists()) {
+            $user->alreadyFollowing = true;
+        } else {
+            $user->alreadyFollowing = false;
+        }
+    }
+
     return view('search', [
+        'users' => $users,
         'films' => $data['results']
     ]);
 })->name('search');
+
+Route::post('/following', [FollowerController::class, 'following'])->name('following.store')->middleware('auth');
 
 Route::post('/playlists', [PlaylistController::class, 'store'])->name('playlists.store')->middleware('auth');
 Route::post('/playlists/add-film', [PlaylistController::class, 'addFilmToPlaylist'])->name('playlists.toggle')->middleware('auth');
@@ -74,6 +88,7 @@ Route::get('/profile/{username}/reviews', [ProfileController::class, 'reviews'])
 Route::get('/profile/{username}/lists', [ProfileController::class, 'lists'])->name('profile.lists');
 Route::get('/profile/{username}/watchlist', [ProfileController::class, 'watchlist'])->name('profile.watchlist');
 Route::get('/profile/{username}/playlists', [ProfileController::class, 'playlists'])->name('profile.playlists');
+Route::get('/profile/{username}/followers', [ProfileController::class, 'followers'])->name('profile.followers');
 
 Route::post('reviews', [ReviewController::class, 'store'])->name('reviews.store')->middleware('auth');
 Route::post('watched', [WatchedController::class, 'store'])->name('watched.store')->middleware('auth');

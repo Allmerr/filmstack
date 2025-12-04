@@ -55,9 +55,9 @@
     </div>
 
     <!-- Tabs -->
-   <div class="bg-[#14181c] border-b border-gray-800 sticky top-[72px] z-40">
+    <div class="bg-[#14181c] border-b border-gray-800 sticky top-[72px] z-40">
         <div class="max-w-5xl mx-auto px-6 flex gap-8 text-sm font-bold uppercase tracking-widest overflow-x-auto">
-            <button class="py-4 border-b-2 border-primary text-white transition-colors whitespace-nowrap">
+           <button class="py-4 border-b-2 border-transparent text-textMuted hover:text-white transition-colors whitespace-nowrap">
                 <a href="{{ route('profile.watched', ['username' => $user->username]) }}">Watched</a> <span class="text-xs text-gray-600 ml-1">{{ $watched->count() }}</span>
             </button>
             <button class="py-4 border-b-2 border-transparent text-textMuted hover:text-white transition-colors whitespace-nowrap">
@@ -72,31 +72,40 @@
             <button class="py-4 border-b-2 border-transparent text-textMuted hover:text-white transition-colors whitespace-nowrap">
                 <a href="{{ route('profile.playlists', ['username' => $user->username]) }}">Playlists</a> <span class="text-xs text-gray-600 ml-1">{{$playlists->count()}}</span>
             </button>
-            <button class="py-4 border-b-2 border-transparent text-textMuted hover:text-white transition-colors whitespace-nowrap">
-                <a href="{{ route('profile.followers', ['username' => $user->username]) }}">Friends</a> <span class="text-xs text-gray-600 ml-1">{{$followers}}</span>
+            <button class="py-4 border-b-2 border-primary text-white transition-colors whitespace-nowrap">
+                <a href="{{ route('profile.followers', ['username' => $user->username]) }}">Friends</a> <span class="text-xs text-gray-600 ml-1">{{$followers->count()}}</span>
             </button>
-
         </div>
     </div>
-
 
     <!-- Content -->
     <div class="max-w-5xl mx-auto px-6 py-8">
 
         <!-- Example Content Grid -->
         <div class="grid grid-cols-4 sm:grid-cols-5 md:grid-cols-6 lg:grid-cols-8 gap-2">
-
-            <!-- Movie Item -->
-            @foreach($watched as $watch)
-            <a href="{{ url('/film/'.$watch->movie['id']) }}" class="relative group cursor-pointer block">
-                <div class="relative pb-[150%] rounded overflow-hidden border border-white/10 hover:border-primary transition-colors">
-                    <img src="https://image.tmdb.org/t/p/w500/{{ $watch->movie['poster_path'] }}" class="absolute inset-0 w-full h-full object-cover" />
-                    <div class="absolute inset-0 bg-black/60 opacity-0 group-hover:opacity-100 flex items-center justify-center transition-opacity">
-                        <span class="text-white font-bold text-sm text-center px-1">{{ $watch->rated->rating ?? 'Not Rated' }} ★</span>
-                    </div>
+    
+            @if($followers->isEmpty())
+                <div class="col-span-full text-center text-textMuted py-12">
+                    No followers yet.
                 </div>
-            </a>
-            @endforeach
+            @else
+                @foreach($followers as $follower)
+                <a href="/profile/{{ $follower->user->username }}/watched"
+                   class="group block bg-darker rounded-md p-3 hover:shadow-lg border border-gray-800 transition-colors"
+                   aria-label="{{  ($follower->user->username ?? 'View user') }}">
+                  <div class="flex items-center">
+                    <img
+                      src="{{ 'https://i.pravatar.cc/150?img=12'}}"
+                      alt="{{ $follower->user->username }}"
+                      class="w-14 h-14 rounded-full object-cover border border-white/10"
+                      loading="lazy"
+                    />
+                      <p class="text-white font-semibold text-sm truncate">{{ $follower->user->username ?? 'Unknown' }}</p>
+                  </div>
+                  
+                </a>
+                @endforeach
+            @endif
 
             <!-- Tambahkan item lain disini -->
 

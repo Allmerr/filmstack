@@ -10,6 +10,7 @@ use App\Models\Liked;
 use App\Models\Watchlist;
 use App\Models\Rated;
 use App\Models\Playlist;
+use App\Models\Follower;
 
 
 class ProfileController extends Controller
@@ -35,6 +36,7 @@ class ProfileController extends Controller
             'liked' => Liked::where('users_id', $user->id)->with('user')->get(),
             'watchlist' => Watchlist::where('users_id', $user->id)->with('user')->get(),
             'playlists' => Playlist::where('users_id', $user->id)->with('filmofplaylists')->get(),
+            'followers' => $user->followers()->count(),
         ]);
     }
 
@@ -133,6 +135,22 @@ class ProfileController extends Controller
             'watched' => Watched::where('users_id', $user->id)->with('user')->get(),
             'liked' => Liked::where('users_id', $user->id)->with('user')->get(),
             'watchlist' => Watchlist::where('users_id', $user->id)->with('user')->get(),
+        ]);
+    }
+
+    public function followers($username)
+    {
+        $user = \App\Models\User::where('username', $username)->firstOrFail();
+        $followers = Follower::where('following_to_users_id', $user->id)->with('user')->get();
+
+        return view('profile.followers', [
+            'user' => $user,
+            'followers' => $followers,
+            'reviews' => Review::where('users_id', $user->id)->with('user')->get(),
+            'watched' => Watched::where('users_id', $user->id)->with('user')->get(),
+            'liked' => Liked::where('users_id', $user->id)->with('user')->get(),
+            'watchlist' => Watchlist::where('users_id', $user->id)->with('user')->get(),
+            'playlists' => Playlist::where('users_id', $user->id)->with('filmofplaylists')->get(),
         ]);
     }
 }

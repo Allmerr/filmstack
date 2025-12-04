@@ -53,6 +53,63 @@
           </a>    
           @endforeach
         </div>
+        <div class="mt-6 border-t border-gray-800 pt-6">
+          @if(isset($users) && count($users) > 0)
+            <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-3">
+              @foreach($users as $user)
+                <a href="/profile/{{ $user['username'] }}/watched"
+                   class="group block bg-darker rounded-md p-3 hover:shadow-lg border border-gray-800 transition-colors"
+                   aria-label="{{  ($user['username'] ?? 'View user') }}">
+                  <div class="flex items-center space-x-3">
+                    <img
+                      src="{{ 'https://i.pravatar.cc/150?img=12'}}"
+                      alt="{{ $user['username'] }}"
+                      class="w-14 h-14 rounded-full object-cover border border-white/10"
+                      loading="lazy"
+                    />
+                    <div class="flex-1 min-w-0">
+                      <p class="text-white font-semibold text-sm truncate">{{ $user['username'] ?? 'Unknown' }}</p>
+                      @if(Auth::check() && Auth::user()->username !== $user['username'])
+                        <form method="POST" action="{{ route('following.store') }}" class="mt-1">
+                          <input type="hidden" name="following_to_users_id" value="{{ $user['id'] }}">
+                          @csrf
+                          @if($user->alreadyFollowing)  
+                            <input type="hidden" name="alreadyFollowing"  value="1">
+                              <button
+                              type="submit"
+                              class="inline-flex items-center px-3 py-1 text-sm font-semibold rounded-md bg-white/5 text-textMuted border border-gray-700 hover:bg-white/10 transition-colors"
+                              aria-label="Unfollow {{ $user['username'] }}"
+                            >
+                              Unfriends
+                            </button>
+                          @else
+                            <button
+                              type="submit"
+                              class="inline-flex items-center px-3 py-1 text-sm font-semibold rounded-md bg-primary text-dark hover:bg-green-600 transition-colors"
+                              aria-label="Follow {{ $user['username'] }}"
+                            >
+                              Add friends
+                            </button>
+                          @endif
+                        </form>
+                      @endif
+                    </div>
+                  </div>
+                </a>
+              @endforeach
+            </div>
+
+            @if(method_exists($users, 'links'))
+              <div class="mt-4">
+                {{ $users->links() }}
+              </div>
+            @endif
+          @else
+            <div class="py-6 text-center text-textMuted">
+              No users found for "{{ request('user_query') }}" .
+            </div>
+          @endif
+        </div>
         </div>
     </main>
 @endsection

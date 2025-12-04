@@ -50,4 +50,9 @@ class User extends Authenticatable
     {
         return $this->hasMany(Playlist::class, 'users_id');
     }
+
+    public function followers()
+    {
+        return $this->hasMany(Follower::class, 'following_to_users_id');
+    }
 }
