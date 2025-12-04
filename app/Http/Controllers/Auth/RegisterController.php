@@ -37,7 +37,7 @@ class RegisterController extends Controller
         auth()->login($user);
         
         // Redirect to dashboard or intended page
-        return redirect()->intended('welcome');
+        return redirect()->intended('/');
     }
 }
 
