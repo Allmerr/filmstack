@@ -96,6 +96,35 @@
           @endforeach
         </div>
 
+        <!-- Pagination Controls -->
+        <div class="py-8 px-4 text-center border-t border-gray-800 mt-12">
+          <div class="flex justify-center items-center gap-4">
+            @if($currentPage > 1)
+              <a href="/?page={{ $currentPage - 1 }}" class="bg-primary hover:bg-primaryHover text-white font-bold py-2 px-6 rounded transition-colors">
+                ← Previous
+              </a>
+            @else
+              <button disabled class="bg-gray-600 text-gray-400 font-bold py-2 px-6 rounded cursor-not-allowed">
+                ← Previous
+              </button>
+            @endif
+
+            <span class="text-white font-semibold">
+              Page <span class="text-primary">{{ $currentPage }}</span> of <span class="text-primary">{{ $totalPages }}</span>
+            </span>
+
+            @if($currentPage < $totalPages)
+              <a href="/?page={{ $currentPage + 1 }}" class="bg-primary hover:bg-primaryHover text-white font-bold py-2 px-6 rounded transition-colors">
+                Next →
+              </a>
+            @else
+              <button disabled class="bg-gray-600 text-gray-400 font-bold py-2 px-6 rounded cursor-not-allowed">
+                Next →
+              </button>
+            @endif
+          </div>
+        </div>
+
         <!-- CTA Section -->
         <div class="py-20 px-4 text-center border-t border-gray-800 mt-12">
              <h2 class="text-2xl font-bold text-white mb-4">Film data from TMDb.</h2>

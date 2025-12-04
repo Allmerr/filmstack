@@ -47,7 +47,10 @@
                         <path d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z"/>
                       </svg>
                     </span>
-                    <p class="text-white font-bold text-lg leading-tight mb-1">{{ $film['vote_average'] ?? ''}} - {{ $film['vote_count'] ?? ''}}</p>
+                    @php
+                      $local = isset($localRatings) && isset($film['id']) ? ($localRatings[$film['id']] ?? null) : null;
+                    @endphp
+                    <p class="text-white font-bold text-lg leading-tight mb-1">{{ $local ? $local['avg'] : ($film['vote_average'] ?? '') }} - {{ $local ? $local['count'] : ($film['vote_count'] ?? '') }}</p>
                     <p class="text-textMuted text-xs uppercase tracking-wider mb-3">Rating</p>
                   </div>
               </div>
@@ -59,6 +62,35 @@
             </div>
           </a>    
           @endforeach
+        </div>
+
+        <!-- Pagination Controls -->
+        <div class="py-8 px-4 text-center border-t border-gray-800 mt-12">
+          <div class="flex justify-center items-center gap-4">
+            @if($currentPage > 1)
+              <a href="/discover?page={{ $currentPage - 1 }}" class="bg-primary hover:bg-primaryHover text-white font-bold py-2 px-6 rounded transition-colors">
+                ← Previous
+              </a>
+            @else
+              <button disabled class="bg-gray-600 text-gray-400 font-bold py-2 px-6 rounded cursor-not-allowed">
+                ← Previous
+              </button>
+            @endif
+
+            <span class="text-white font-semibold">
+              Page <span class="text-primary">{{ $currentPage }}</span> of <span class="text-primary">{{ $totalPages }}</span>
+            </span>
+
+            @if($currentPage < $totalPages)
+              <a href="/discover?page={{ $currentPage + 1 }}" class="bg-primary hover:bg-primaryHover text-white font-bold py-2 px-6 rounded transition-colors">
+                Next →
+              </a>
+            @else
+              <button disabled class="bg-gray-600 text-gray-400 font-bold py-2 px-6 rounded cursor-not-allowed">
+                Next →
+              </button>
+            @endif
+          </div>
         </div>
       </div>
     </main>
