@@ -33,6 +33,7 @@ class ProfileController extends Controller
             'user' => $user,
             'reviews' => Review::where('users_id', $user->id)->with('user')->get(),
             'watched' => $watched,
+            'followers' => Follower::where('following_to_users_id', $user->id)->with('user')->get(),
             'liked' => Liked::where('users_id', $user->id)->with('user')->get(),
             'watchlist' => Watchlist::where('users_id', $user->id)->with('user')->get(),
             'playlists' => Playlist::where('users_id', $user->id)->with('filmofplaylists')->get(),

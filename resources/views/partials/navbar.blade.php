@@ -20,9 +20,8 @@
             @endguest
             @auth
             <a href="{{ route('profile.watched', ['username' => auth()->user()->username]) }}" class="hover:text-white transition-colors">Profile</a>
-            <a href="#" class="hover:text-white transition-colors">Journal</a>
             @endauth
-            <a href="#" class="hover:text-white transition-colors">Films</a>
+            <a href="{{ route('discover') }}" class="hover:text-white transition-colors">Films</a>
             <a href="#" class="hover:text-white transition-colors">Lists</a>
           </div>
         </div>
