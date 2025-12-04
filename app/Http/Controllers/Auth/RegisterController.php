@@ -22,7 +22,17 @@ class RegisterController extends Controller
         $validatedData = $request->validate([
             'username' => 'required|string|max:255|unique:users,username',
             'email' => 'required|email|unique:users,email',
-            'password' => 'required|min:6|confirmed',
+            'password' => [
+                'required',
+                'min:8',
+                'confirmed',
+                'regex:/[A-Z]/', // At least 1 uppercase
+                'regex:/[0-9]/', // At least 1 number
+                'regex:/[*_\-!@#$%^&()+=\[\]{};:\'",.<>?\/\\|`~]/', // At least 1 special character
+            ],
+        ], [
+            'password.regex' => 'Password must contain at least 1 uppercase letter, 1 number, and 1 special character.',
+            'password.min' => 'Password must be at least 8 characters long.',
         ]);
             
         // Create the user
