@@ -12,55 +12,61 @@
                    </div>
                  </div>
                  <nav class="flex-grow p-4 space-y-2">
-                    <button onclick="navigateTo('admin', 'dashboard')" class="w-full text-left px-4 py-3 rounded ${activeTab === 'dashboard' ? 'bg-primary/10 text-primary border border-primary/20 font-bold' : 'text-textMuted hover:bg-white/5 hover:text-white'} transition-all flex items-center gap-3">
+                    <a href="{{ route('admin.dashboard') }}" class="w-full text-left px-4 py-3 rounded bg-primary/10 text-primary border border-primary/20 font-bold transition-all flex items-center gap-3 no-underline">
                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2V6zM14 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2V6zM4 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2v-2zM14 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2v-2z"></path></svg>
                        Dashboard
-                    </button>
-                    <button onclick="navigateTo('admin', 'movies')" class="w-full text-left px-4 py-3 rounded ${activeTab === 'movies' ? 'bg-primary/10 text-primary border border-primary/20 font-bold' : 'text-textMuted hover:bg-white/5 hover:text-white'} transition-all flex items-center gap-3">
-                       <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 4v16M17 4v16M3 8h4m10 0h4M3 12h18M3 16h4m10 0h4M4 20h16a1 1 0 001-1V5a1 1 0 00-1-1H4a1 1 0 00-1 1v14a1 1 0 001 1z"></path></svg>
-                       Movies
-                    </button>
-                    <button onclick="navigateTo('admin', 'users')" class="w-full text-left px-4 py-3 rounded ${activeTab === 'users' ? 'bg-primary/10 text-primary border border-primary/20 font-bold' : 'text-textMuted hover:bg-white/5 hover:text-white'} transition-all flex items-center gap-3">
+                    </a>
+                    <a href="{{ route('admin.users') }}" class="w-full text-left px-4 py-3 rounded text-textMuted hover:bg-white/5 hover:text-white transition-all flex items-center gap-3 no-underline">
                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z"></path></svg>
                        Users
-                    </button>
+                    </a>
                  </nav>
                  <div class="p-4 border-t border-gray-800">
-                    <button onclick="navigateTo('home')" class="w-full text-left px-4 py-3 rounded text-red-400 hover:bg-red-900/20 transition-colors flex items-center gap-2 font-bold text-sm">
-                       <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1"></path></svg>
-                       Exit Admin
-                    </button>
+                    <form method="POST" action="{{ route('admin.logout') }}">
+                        @csrf
+                        <button type="submit" class="w-full text-left px-4 py-3 rounded text-red-400 hover:bg-red-900/20 transition-colors flex items-center gap-2 font-bold text-sm">
+                           <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1"></path></svg>
+                           Logout
+                        </button>
+                    </form>
                  </div>
               </aside>
 
               <!-- Main Content -->
               <main class="flex-grow ml-64 p-8 md:p-12">
+                  @if(session('success'))
+                      <div class="mb-6 p-4 rounded bg-green-900/20 border border-green-500/30 text-green-400">
+                          {{ session('success') }}
+                      </div>
+                  @endif
+
                   <header class="mb-8">
-                      <h2 class="text-3xl font-bold text-white mb-1 capitalize">${activeTab}</h2>
-                      <p class="text-textMuted text-sm">Manage your CineLog application data.</p>
+                      <h2 class="text-3xl font-bold text-white mb-1">Dashboard</h2>
+                      <p class="text-textMuted text-sm">Manage your Filmstack application data.</p>
                   </header>
+                  
                   <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
                     <!-- Stat Card 1 -->
                     <div class="bg-[#1f252b] p-6 rounded-lg border border-white/5 shadow-lg">
                         <div class="flex items-center justify-between mb-4">
-                            <h3 class="text-textMuted text-sm font-bold uppercase tracking-widest">Total Films</h3>
-                            <div class="p-2 bg-blue-500/10 rounded text-blue-400">
-                                <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 4v16M17 4v16M3 8h4m10 0h4M3 12h18M3 16h4m10 0h4M4 20h16a1 1 0 001-1V5a1 1 0 00-1-1H4a1 1 0 00-1 1v14a1 1 0 001 1z"></path></svg>
-                            </div>
-                        </div>
-                        <p class="text-4xl font-bold text-white">${totalMovies}</p>
-                        <p class="text-xs text-textMuted mt-2">+2 added this week</p>
-                    </div>
-                    <!-- Stat Card 2 -->
-                     <div class="bg-[#1f252b] p-6 rounded-lg border border-white/5 shadow-lg">
-                        <div class="flex items-center justify-between mb-4">
-                            <h3 class="text-textMuted text-sm font-bold uppercase tracking-widest">Active Users</h3>
+                            <h3 class="text-textMuted text-sm font-bold uppercase tracking-widest">Total Users</h3>
                             <div class="p-2 bg-primary/10 rounded text-primary">
                                 <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z"></path></svg>
                             </div>
                         </div>
-                        <p class="text-4xl font-bold text-white">${totalUsers}</p>
-                        <p class="text-xs text-textMuted mt-2">Growth +12%</p>
+                        <p class="text-4xl font-bold text-white">{{ $stats['total_users'] }}</p>
+                        <p class="text-xs text-textMuted mt-2">+{{ $stats['new_users_week'] }} this week</p>
+                    </div>
+                    <!-- Stat Card 2 -->
+                     <div class="bg-[#1f252b] p-6 rounded-lg border border-white/5 shadow-lg">
+                        <div class="flex items-center justify-between mb-4">
+                            <h3 class="text-textMuted text-sm font-bold uppercase tracking-widest">Total Playlists</h3>
+                            <div class="p-2 bg-blue-500/10 rounded text-blue-400">
+                                <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2"></path></svg>
+                            </div>
+                        </div>
+                        <p class="text-4xl font-bold text-white">{{ $stats['total_playlists'] }}</p>
+                        <p class="text-xs text-textMuted mt-2">Created by users</p>
                     </div>
                     <!-- Stat Card 3 -->
                      <div class="bg-[#1f252b] p-6 rounded-lg border border-white/5 shadow-lg">
@@ -70,29 +76,56 @@
                                 <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 10h.01M12 10h.01M16 10h.01M9 16H5a2 2 0 01-2-2V6a2 2 0 012-2h14a2 2 0 012 2v8a2 2 0 01-2 2h-5l-5 5v-5z"></path></svg>
                             </div>
                         </div>
-                        <p class="text-4xl font-bold text-white">${totalReviews}</p>
-                        <p class="text-xs text-textMuted mt-2">Avg rating 4.2</p>
+                        <p class="text-4xl font-bold text-white">{{ $stats['total_reviews'] }}</p>
+                        <p class="text-xs text-textMuted mt-2">{{ $stats['total_admins'] }} admins</p>
                     </div>
                  </div>
                  
+                 <!-- Recent Users -->
+                 <div class="bg-[#1f252b] rounded-lg border border-white/5 p-6 mb-6">
+                    <h3 class="text-white font-bold mb-4">Recent Users</h3>
+                    <div class="space-y-3">
+                        @forelse($recent_users as $user)
+                        <div class="flex items-center justify-between p-3 bg-dark rounded border border-white/5">
+                            <div class="flex items-center gap-3">
+                                <div class="w-10 h-10 rounded-full bg-primary flex items-center justify-center text-dark text-sm font-bold">
+                                    {{ strtoupper(substr($user->username, 0, 1)) }}
+                                </div>
+                                <div>
+                                    <p class="text-white font-semibold">{{ $user->username }}</p>
+                                    <p class="text-textMuted text-xs">{{ $user->email }}</p>
+                                </div>
+                            </div>
+                            <div class="text-right">
+                                <p class="text-textMuted text-xs">{{ $user->created_at->diffForHumans() }}</p>
+                                @if($user->is_admin)
+                                    <span class="inline-block px-2 py-1 bg-primary/10 text-primary text-xs rounded font-bold">Admin</span>
+                                @endif
+                            </div>
+                        </div>
+                        @empty
+                        <p class="text-textMuted text-sm">No users yet.</p>
+                        @endforelse
+                    </div>
+                 </div>
+
+                 <!-- Recent Playlists -->
                  <div class="bg-[#1f252b] rounded-lg border border-white/5 p-6">
-                    <h3 class="text-white font-bold mb-4">Recent Activity</h3>
-                    <div class="space-y-4">
-                        <div class="flex items-center gap-3 text-sm text-textMuted">
-                            <div class="w-2 h-2 rounded-full bg-primary"></div>
-                            <span>New user <strong>@filmlover99</strong> registered.</span>
-                            <span class="ml-auto text-xs opacity-50">2m ago</span>
+                    <h3 class="text-white font-bold mb-4">Recent Playlists</h3>
+                    <div class="space-y-3">
+                        @forelse($recent_playlists as $playlist)
+                        <div class="flex items-center justify-between p-3 bg-dark rounded border border-white/5">
+                            <div>
+                                <p class="text-white font-semibold">{{ $playlist->name }}</p>
+                                <p class="text-textMuted text-xs">by {{ $playlist->user->username ?? 'Unknown' }}</p>
+                            </div>
+                            <div class="text-right">
+                                <p class="text-textMuted text-xs">{{ $playlist->created_at->diffForHumans() }}</p>
+                            </div>
                         </div>
-                         <div class="flex items-center gap-3 text-sm text-textMuted">
-                            <div class="w-2 h-2 rounded-full bg-blue-500"></div>
-                            <span>New review added to <strong>Dune: Part Two</strong>.</span>
-                             <span class="ml-auto text-xs opacity-50">15m ago</span>
-                        </div>
-                         <div class="flex items-center gap-3 text-sm text-textMuted">
-                            <div class="w-2 h-2 rounded-full bg-yellow-500"></div>
-                            <span>Server maintenance scheduled.</span>
-                             <span class="ml-auto text-xs opacity-50">1h ago</span>
-                        </div>
+                        @empty
+                        <p class="text-textMuted text-sm">No playlists yet.</p>
+                        @endforelse
                     </div>
                  </div>
               </main>
