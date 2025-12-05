@@ -14,7 +14,7 @@
                 <!-- Avatar -->
                 <div class="flex-shrink-0">
                     <div class="w-24 h-24 md:w-32 md:h-32 rounded-full border-4 border-[#1f252b] shadow-xl overflow-hidden">
-                        <img src="{{ 'https://i.pravatar.cc/150?img=12'}}" class="w-full h-full object-cover" />
+                        <img src="{{ $user->avatar ? asset('storage/profile/' . $user->avatar) : 'https://i.pravatar.cc/150?img=12' }}" class="w-full h-full object-cover" />
                     </div>
                 </div>
 
@@ -58,29 +58,7 @@
         </div>
     </div>
 
-    <!-- Tabs -->
-    <div class="bg-[#14181c] border-b border-gray-800 sticky top-[72px] z-40">
-        <div class="max-w-5xl mx-auto px-6 flex gap-8 text-sm font-bold uppercase tracking-widest overflow-x-auto">
-            <a href="{{ route('profile.watched', ['username' => $user->username]) }}" class="py-4 border-b-2 border-transparent text-textMuted hover:text-white transition-colors whitespace-nowrap">
-                Watched <span class="text-xs text-gray-600 ml-1">{{ $watched->count() }}</span>
-            </a>
-            <a href="{{ route('profile.liked', ['username' => $user->username]) }}" class="py-4 border-b-2 border-transparent text-textMuted hover:text-white transition-colors whitespace-nowrap">
-                Likes <span class="text-xs text-gray-600 ml-1">{{ $liked->count() }}</span>
-            </a>
-            <a href="{{ route('profile.reviews', ['username' => $user->username]) }}" class="py-4 border-b-2 border-transparent text-textMuted hover:text-white transition-colors whitespace-nowrap">
-                Reviews <span class="text-xs text-gray-600 ml-1">{{ $reviews->count() }}</span>
-            </a>
-            <a href="{{ route('profile.watchlist', ['username' => $user->username]) }}" class="py-4 border-b-2 border-transparent text-textMuted hover:text-white transition-colors whitespace-nowrap">
-                Watchlist <span class="text-xs text-gray-600 ml-1">{{ $watchlist->count() }}</span>
-            </a>
-            <a href="{{ route('profile.playlists', ['username' => $user->username]) }}" class="py-4 border-b-2 border-transparent text-textMuted hover:text-white transition-colors whitespace-nowrap">
-                Playlists <span class="text-xs text-gray-600 ml-1">{{ $playlists->count() }}</span>
-            </a>
-            <a href="{{ route('profile.followers', ['username' => $user->username]) }}" class="py-4 border-b-2 border-primary text-white transition-colors whitespace-nowrap">
-                Friends <span class="text-xs text-gray-600 ml-1">{{ $followers->count() + $following->count() }}</span>
-            </a>
-        </div>
-    </div>
+    @include('profile._tabs')
 
     <!-- Content -->
     <div class="max-w-5xl mx-auto px-6 py-8">
@@ -127,3 +105,4 @@
 </div>
 
 @endsection
+@include('profile._edit_profile_modal')
