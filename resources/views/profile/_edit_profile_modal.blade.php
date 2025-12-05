@@ -3,7 +3,7 @@
     <div class="bg-[#1f252b] w-full max-w-lg rounded-xl shadow-2xl border border-white/10 relative transform scale-95 transition-all duration-300 z-10 overflow-hidden">
        <div class="p-6">
           <h3 class="text-white font-bold text-xl mb-6">Edit Profile</h3>
-          <form onsubmit="" class="space-y-4" method="POST" action="{{ route('profile.update', ['username' => $user->username]) }}" enctype="multipart/form-data">
+          <form class="space-y-4" method="POST" action="{{ route('profile.update', ['username' => $user->username]) }}" enctype="multipart/form-data">
             @csrf
              <!-- Avatar -->
              <div class="flex items-center gap-4">

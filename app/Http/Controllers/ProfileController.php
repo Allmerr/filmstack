@@ -211,6 +211,15 @@ class ProfileController extends Controller
         // Update user profile
         $user->update($validatedData);
         
+        // Redirect to the current profile tab (liked, reviews, etc.) or default to watched
+        $currentRoute = request()->header('referer') ? parse_url(request()->header('referer'), PHP_URL_PATH) : null;
+        
+        // Try to extract the route name from the referrer to redirect to the same tab
+        if ($currentRoute && preg_match('/profile\/[^\/]+\/(.+)$/', $currentRoute, $matches)) {
+            $tab = $matches[1];
+            return redirect()->route("profile.{$tab}", ['username' => $user->username])->with('success', 'Profile updated successfully.');
+        }
+        
         return redirect()->route('profile.watched', ['username' => $user->username])->with('success', 'Profile updated successfully.');
     }
 }

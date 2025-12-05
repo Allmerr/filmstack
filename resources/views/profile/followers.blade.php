@@ -102,7 +102,7 @@
 
     </div>
 
+    @include('profile._edit_profile_modal')
 </div>
 
 @endsection
-@include('profile._edit_profile_modal')
