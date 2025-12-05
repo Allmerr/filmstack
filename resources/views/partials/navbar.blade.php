@@ -21,8 +21,8 @@
             @auth
             <a href="{{ route('profile.watched', ['username' => auth()->user()->username]) }}" class="hover:text-white transition-colors">Profile</a>
             @endauth
-            <a href="{{ route('discover') }}" class="hover:text-white transition-colors">Films</a>
-            <a href="#" class="hover:text-white transition-colors">Lists</a>
+            <a href="{{ route('discover') }}" class="hover:text-white transition-colors">Discover</a>
+            <a href="{{ route('playlists.index') }}" class="hover:text-white transition-colors">Lists</a>
           </div>
         </div>
 
@@ -111,11 +111,11 @@
                 Profile <span>&rarr;</span>
             </a>
             @endauth
-            <a href="#" class="hover:text-primary transition-colors flex items-center justify-between border-b border-gray-800 pb-2">
-                Films
+            <a href="{{ route('discover') }}" class="hover:text-primary transition-colors flex items-center justify-between border-b border-gray-800 pb-2">
+              Discover <span>&rarr;</span>
             </a>
-            <a href="#" class="hover:text-primary transition-colors flex items-center justify-between border-b border-gray-800 pb-2">
-                Lists
+            <a href="{{ route('profile.playlists', ['username' => auth()->user()->username ?? '']) }}" class="hover:text-primary transition-colors flex items-center justify-between border-b border-gray-800 pb-2">
+              Lists <span>&rarr;</span>
             </a>
         </nav>
     </div>  

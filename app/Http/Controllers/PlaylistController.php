@@ -14,8 +14,14 @@ class PlaylistController extends Controller
      */
     public function index()
     {
-        //
+        $playlists = Playlist::with(['user', 'filmofplaylists'])->paginate(12);
+        $this->hydratePosters($playlists);
+
+        return view('playlists.index', [
+            'playlists' => $playlists,
+        ]);
     }
+
 
     /**
      * Show the form for creating a new resource.
@@ -128,5 +134,24 @@ class PlaylistController extends Controller
             ->delete();
 
         return redirect()->back()->with('success', 'Film removed from playlist.');
+    }
+
+    /**
+     * Hydrate poster and title for up to 3 films in each playlist for preview.
+     */
+    private function hydratePosters($playlists)
+    {
+        foreach ($playlists as $playlist) {
+            foreach ($playlist->filmofplaylists->take(3) as $key => $film) {
+                $response = Http::withHeaders([
+                    'Authorization' => 'Bearer eyJhbGciOiJIUzI1NiJ9.eyJhdWQiOiI1MjA5MDZjY2I2MjAyMmI1YTRhYTk0NDNmMzIyZTVjOSIsIm5iZiI6MTc2NDQ4NzgyMS4wMTcsInN1YiI6IjY5MmJmMjhkM2ViYWNhZjQ1OTI0ZjAwNyIsInNjb3BlcyI6WyJhcGlfcmVhZCJdLCJ2ZXJzaW9uIjoxfQ.JfScCkisoJ0WsY70j7B-rjrrHGo7vppce7j2CfcwEs8'
+                ])->get("https://api.themoviedb.org/3/movie/{$film->id_films}");
+
+                if ($response->ok()) {
+                    $playlist->filmofplaylists[$key]->poster_path = $response->json()['poster_path'] ?? null;
+                    $playlist->filmofplaylists[$key]->title = $response->json()['title'] ?? null;
+                }
+            }
+        }
     }
 }
