@@ -108,6 +108,9 @@
                 <button type="submit" class="w-full bg-primary hover:bg-primaryHover text-white font-bold py-2 px-4 rounded-md transition-colors">
                     Sign In
                 </button>
+                <p class="text-center text-textMuted text-sm mt-4">
+                    Already have an account? <a href="{{ route('login') }}" class="text-primary hover:text-primaryHover font-semibold transition-colors">Sign in</a>
+                </p>
             </form>
         </div>
     </div>

@@ -453,5 +453,20 @@
           openPlaylistModal(movieId);
       }
 
+      // Prevent double-click form submissions
+      document.addEventListener('DOMContentLoaded', function() {
+          const forms = document.querySelectorAll('form');
+          forms.forEach(form => {
+              form.addEventListener('submit', function(e) {
+                  const submitButtons = form.querySelectorAll('button[type="submit"]');
+                  submitButtons.forEach(button => {
+                      button.disabled = true;
+                      button.style.opacity = '0.5';
+                      button.style.cursor = 'not-allowed';
+                  });
+              });
+          });
+      });
+
       </script>
   @endpush
