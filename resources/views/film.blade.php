@@ -43,7 +43,7 @@
                    <div class="flex gap-3">
                      <form action="{{ route('watched.store') }}" method="POST">
                       @csrf
-                        <input type="hidden" name="id_films" value="{{ $data['id'] }}">
+                        <input type="hidden" name="id_films" value="{{ $data['id'] ?? '' }}">
                         @if($watched->contains('users_id', auth()->id()))
                         <input type="hidden" name="alreadyLiked" value="1">
                         <button type="submit" class="group flex items-center gap-2 px-4 py-2 rounded-lg bg-[#14181c] border border-white/10 border-green-500/50 bg-green-500/10 transition-all duration-300">
@@ -60,7 +60,7 @@
 
                      <form action="{{ route('liked.store') }}" method="POST">
                       @csrf
-                        <input type="hidden" name="id_films" value="{{ $data['id'] }}">
+                        <input type="hidden" name="id_films" value="{{ $data['id'] ?? '' }}">
                         @if($liked->contains('users_id', auth()->id()))
                         <input type="hidden" name="alreadyLiked" value="1">
                         <button type="submit" class="group flex items-center gap-2 px-4 py-2 rounded-lg bg-[#14181c] border border-white/10 border-pink-500/50 bg-pink-500/10 transition-all duration-300">
@@ -77,7 +77,7 @@
 
                      <form action="{{ route('watchlist.store') }}" method="POST">
                         @csrf
-                           <input type="hidden" name="id_films" value="{{ $data['id'] }}">
+                           <input type="hidden" name="id_films" value="{{ $data['id'] ?? '' }}">
                            @if($watchlist->contains('users_id', auth()->id()))
                            <input type="hidden" name="alreadyInWatchlist" value="1">
                            <button type="submit" class="group flex items-center gap-2 px-4 py-2 rounded-lg bg-[#14181c] border border-white/10 border-blue-500/50 bg-blue-500/10 transition-all duration-300">
@@ -93,7 +93,7 @@
                      </form>
                      
                       <!-- ADD TO LIST BUTTON -->
-                      <button onclick="openPlaylistModal('{{ $data['id'] }}')" class="group flex items-center gap-2 px-4 py-2 rounded-lg bg-[#14181c] border border-white/10 hover:border-purple-500/50 hover:bg-purple-500/10 transition-all duration-300">
+                      <button onclick="openPlaylistModal('{{ $data['id'] ?? '' }}')" class="group flex items-center gap-2 px-4 py-2 rounded-lg bg-[#14181c] border border-white/10 hover:border-purple-500/50 hover:bg-purple-500/10 transition-all duration-300">
                          <svg class="w-5 h-5 text-textMuted group-hover:text-purple-500 transition-colors" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"></path></svg>
                          <span class="font-bold text-sm text-textMuted group-hover:text-white">List</span>
                       </button>
@@ -104,7 +104,7 @@
                    <!-- Rating -->
                   <form action="{{ route('rated.store') }}" method="POST" id="rating-form">
                      @csrf
-                     <input type="hidden" name="id_films" value="{{ $data['id'] }}">
+                     <input type="hidden" name="id_films" value="{{ $data['id'] ?? ''}}">
                      <input type="hidden" name="rating" id="rating-input" value="">
                    <div class="flex items-center gap-1">
                       <span class="text-xs uppercase font-bold text-textMuted mr-2">Rate</span>

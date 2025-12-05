@@ -58,7 +58,7 @@
                 <div class="col-span-full text-center text-textMuted py-12">This playlist is empty.</div>
             @else
                 @foreach($playlist->filmofplaylists as $film)
-                <a href="/film/{{ $film['id'] ?? $key }}" class="movie-card group relative flex-shrink-0 cursor-pointer w-full block no-underline" aria-label="{{ $film['original_title'] ?? 'View movie' }}">
+                <a href="/film/{{ $film['id_films'] ?? $key }}" class="movie-card group relative flex-shrink-0 cursor-pointer w-full block no-underline" aria-label="{{ $film['original_title'] ?? 'View movie' }}">
                     <div class="relative w-full pb-[150%] overflow-hidden rounded-md shadow-lg border border-white/10 transition-all duration-300 hover:ring-2 hover:ring-primary hover:shadow-primary/20">
                     
                     <img 

@@ -48,7 +48,7 @@
                       </svg>
                     </span>
                     @php
-                      $local = isset($localRatings) && isset($film['id']) ? ($localRatings[$film['id']] ?? null) : null;
+                      $local = isset($localRatings) && isset($film['id_films']) ? ($localRatings[$film['id_films']] ?? null) : null;
                     @endphp
                     <p class="text-white font-bold text-lg leading-tight mb-1">{{ $local ? $local['avg'] : ($film['vote_average'] ?? '') }} - {{ $local ? $local['count'] : ($film['vote_count'] ?? '') }}</p>
                     <p class="text-textMuted text-xs uppercase tracking-wider mb-3">Rating</p>
