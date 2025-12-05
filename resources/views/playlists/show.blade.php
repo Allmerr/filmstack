@@ -15,12 +15,38 @@
 <div class="fade-in min-h-screen pb-20 bg-dark px-4 md:px-6">
     <div class="max-w-5xl mx-auto py-10">
         <div class="flex items-center justify-between mb-6">
-            <div>
+            <div class="flex-1">
                 <p class="text-sm text-textMuted uppercase tracking-widest">Playlist</p>
-                <h1 class="text-3xl font-bold text-white">{{ $playlist->name }}</h1>
+                <h1 class="text-3xl font-bold text-white mb-2">{{ $playlist->name }}</h1>
                 @if($playlist->description)
-                    <p class="text-textMuted mt-1">{{ $playlist->description }}</p>
+                    <p class="text-textMuted mt-1 mb-3">{{ $playlist->description }}</p>
                 @endif
+                <div class="flex items-center gap-4 mt-4">
+                    <a href="{{ route('profile.watched', $playlist->user->username ?? 'unknown') }}" class="flex items-center gap-2 group">
+
+                        <div class="w-10 h-10 rounded-full bg-primary flex items-center justify-center text-dark text-sm font-bold">
+                            <img src="{{ $playlist->user->avatar ? asset('storage/profile/' . $playlist->user->avatar) : 'https://i.pravatar.cc/150?img=12' }}" alt="" class="w-8 h-8 rounded-full object-cover" />
+                        </div>
+                        <div>
+                            <p class="text-white font-semibold group-hover:text-primary transition-colors">{{ $playlist->user->username ?? 'Unknown' }}</p>
+                            <p class="text-textMuted text-xs">Creator</p>
+                        </div>
+                    </a>
+                    <div class="border-l border-gray-700 pl-4">
+                        <p class="text-white font-semibold">{{ $playlist->filmofplaylists->count() }}</p>
+                        <p class="text-textMuted text-xs">Films</p>
+                    </div>
+                    <div class="border-l border-gray-700 pl-4">
+                        <p class="text-white font-semibold">{{ $playlist->created_at->format('M d, Y') }}</p>
+                        <p class="text-textMuted text-xs">Created {{ $playlist->created_at->diffForHumans() }}</p>
+                    </div>
+                    @if($playlist->visibility)
+                        <div class="border-l border-gray-700 pl-4">
+                            <p class="text-white font-semibold capitalize">{{ $playlist->visibility }}</p>
+                            <p class="text-textMuted text-xs">Visibility</p>
+                        </div>
+                    @endif
+                </div>
             </div>
             <div class="flex gap-3">
                 <a href="{{ url()->previous() }}" class="px-4 py-2 rounded border border-gray-700 text-textMuted hover:text-white hover:border-white transition-colors text-sm font-semibold">Back</a>
