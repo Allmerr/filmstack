@@ -50,7 +50,7 @@
                           <h2 class="text-3xl font-bold text-white mb-1">Users</h2>
                           <p class="text-textMuted text-sm">Manage users and permissions.</p>
                       </div>
-                      <a href="{{ route('home') }}" class="px-4 py-2 bg-dark border border-gray-700 rounded text-textMuted hover:text-white hover:border-white transition-colors text-sm font-semibold">
+                      <a href="{{ route('welcome') }}" class="px-4 py-2 bg-dark border border-gray-700 rounded text-textMuted hover:text-white hover:border-white transition-colors text-sm font-semibold">
                           Back to Site
                       </a>
                   </header>
@@ -76,7 +76,7 @@
 
                    <div class="bg-[#1f252b] rounded-lg border border-white/5 overflow-hidden">
                     <div class="p-4 border-b border-gray-800">
-                        <h3 class="font-bold text-white">Registered Users ({{ $users->total() }})</h3>
+                        <h3 class="font-bold text-white">Registered Users ({{ $users->count() }})</h3>
                     </div>
                      <div class="overflow-x-auto">
                         <table class="w-full text-left border-collapse">
@@ -144,11 +144,6 @@
                             </tbody>
                         </table>
                     </div>
-                    @if($users->hasPages())
-                        <div class="p-4 border-t border-gray-800">
-                            {{ $users->links() }}
-                        </div>
-                    @endif
                   </div>
               </main>
 

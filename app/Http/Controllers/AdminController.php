@@ -69,25 +69,27 @@ class AdminController extends Controller
 
     public function users(Request $request)
     {
-        $query = User::query();
+        // $query = User::query();
 
-        if ($request->has('search')) {
-            $search = $request->search;
-            $query->where('username', 'like', "%{$search}%")
-                  ->orWhere('email', 'like', "%{$search}%");
-        }
+        // if ($request->has('search')) {
+        //     $search = $request->search;
+        //     $query->where('username', 'like', "%{$search}%")
+        //           ->orWhere('email', 'like', "%{$search}%");
+        // }
 
-        if ($request->has('filter')) {
-            if ($request->filter === 'admin') {
-                $query->where('is_admin', true);
-            } elseif ($request->filter === 'regular') {
-                $query->where('is_admin', false);
-            }
-        }
+        // if ($request->has('filter')) {
+        //     if ($request->filter === 'admin') {
+        //         $query->where('is_admin', true);
+        //     } elseif ($request->filter === 'regular') {
+        //         $query->where('is_admin', false);
+        //     }
+        // }
 
-        $users = $query->withCount(['playlists', 'reviews'])->latest()->paginate(20);
+        // $users = $query->withCount(['playlists', 'reviews'])->latest()->paginate(20);
 
-        return view('admin.users', compact('users'));
+        return view('admin.users', [
+            'users' => User::all()->sortByDesc('created_at'),
+        ]);
     }
 
     public function toggleAdmin(User $user)
