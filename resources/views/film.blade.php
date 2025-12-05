@@ -102,9 +102,10 @@
                    <div class="w-px h-8 bg-white/10 hidden sm:block"></div>
 
                    <!-- Rating -->
-                  <form action="{{ route('rated.store') }}" method="POST">
+                  <form action="{{ route('rated.store') }}" method="POST" id="rating-form">
                      @csrf
                      <input type="hidden" name="id_films" value="{{ $data['id'] }}">
+                     <input type="hidden" name="rating" id="rating-input" value="">
                    <div class="flex items-center gap-1">
                       <span class="text-xs uppercase font-bold text-textMuted mr-2">Rate</span>
                       <div class="flex text-gray-600 hover:text-primary transition-colors cursor-pointer" id="film-rating-stars">
@@ -113,15 +114,14 @@
                             $userRating = $rated->firstWhere('users_id', auth()->id())->rating;
                           @endphp
                           @foreach ([1,2,3,4,5] as $i)
-                              <input type="hidden" name="isAlreadyRated" value="1">
                              @if($i <= $userRating)
-                               <button type="submit" name="rating" value="{{ $i }}" onclick="rateMovie(this, {{ $i }})" aria-label="Rate {{ $i }} star" class="p-0 m-0 bg-transparent border-0 cursor-pointer">
+                               <button type="button" onclick="submitRating({{ $i }})" aria-label="Rate {{ $i }} star" class="p-0 m-0 bg-transparent border-0 cursor-pointer">
                                   <svg class="w-6 h-6 text-primary fill-current stroke-current transition-all duration-200" viewBox="0 0 24 24" role="img" aria-hidden="true">
                                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11.049 2.927c.3-.921 1.603-.921 1.902 0l1.519 4.674a1 1 0 00.95.69h4.915c.969 0 1.371 1.24.588 1.81l-3.976 2.888a1 1 0 00-.363 1.118l1.518 4.674c.3.922-.755 1.688-1.538 1.118l-3.976-2.888a1 1 0 00-1.176 0l-3.976 2.888c-.783.57-1.838-.197-1.538-1.118l1.518-4.674a1 1 0 00-.363-1.118l-3.976-2.888c-.784-.57-.38-1.81.588-1.81h4.914a1 1 0 00.951-.69l1.519-4.674z" />
                                   </svg>
                                </button>
                              @else
-                               <button type="submit" name="rating" value="{{ $i }}" onclick="rateMovie(this, {{ $i }})" aria-label="Rate {{ $i }} star" class="p-0 m-0 bg-transparent border-0 cursor-pointer">
+                               <button type="button" onclick="submitRating({{ $i }})" aria-label="Rate {{ $i }} star" class="p-0 m-0 bg-transparent border-0 cursor-pointer">
                                   <svg class="w-6 h-6 hover:text-primary hover:fill-current fill-transparent stroke-current transition-all duration-200" viewBox="0 0 24 24" role="img" aria-hidden="true">
                                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11.049 2.927c.3-.921 1.603-.921 1.902 0l1.519 4.674a1 1 0 00.95.69h4.915c.969 0 1.371 1.24.588 1.81l-3.976 2.888a1 1 0 00-.363 1.118l1.518 4.674c.3.922-.755 1.688-1.538 1.118l-3.976-2.888a1 1 0 00-1.176 0l-3.976 2.888c-.783.57-1.838-.197-1.538-1.118l1.518-4.674a1 1 0 00-.363-1.118l-3.976-2.888c-.784-.57-.38-1.81.588-1.81h4.914a1 1 0 00.951-.69l1.519-4.674z" />
                                  </svg>
@@ -130,8 +130,7 @@
                            @endforeach
                         @else
                            @foreach ([1,2,3,4,5] as $i)
-                               <input type="hidden" name="isAlreadyRated" value="0">
-                             <button type="submit" name="rating" value="{{ $i }}" onclick="rateMovie(this, {{ $i }})" aria-label="Rate {{ $i }} star" class="p-0 m-0 bg-transparent border-0 cursor-pointer">
+                             <button type="button" onclick="submitRating({{ $i }})" aria-label="Rate {{ $i }} star" class="p-0 m-0 bg-transparent border-0 cursor-pointer">
                                 <svg class="w-6 h-6 hover:text-primary hover:fill-current fill-transparent stroke-current transition-all duration-200" viewBox="0 0 24 24" role="img" aria-hidden="true">
                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11.049 2.927c.3-.921 1.603-.921 1.902 0l1.519 4.674a1 1 0 00.95.69h4.915c.969 0 1.371 1.24.588 1.81l-3.976 2.888a1 1 0 00-.363 1.118l1.518 4.674c.3.922-.755 1.688-1.538 1.118l-3.976-2.888a1 1 0 00-1.176 0l-3.976 2.888c-.783.57-1.838-.197-1.538-1.118l1.518-4.674a1 1 0 00-.363-1.118l-3.976-2.888c-.784-.57-.38-1.81.588-1.81h4.914a1 1 0 00.951-.69l1.519-4.674z" />
                                 </svg>
@@ -451,6 +450,26 @@
 
           // Re-render list inside modal to show new item
           openPlaylistModal(movieId);
+      }
+
+      // Submit rating form with selected value
+      function submitRating(ratingValue) {
+          // Set the hidden rating input value
+          document.getElementById('rating-input').value = ratingValue;
+          
+          // Get the form and submit it
+          const form = document.getElementById('rating-form');
+          
+          // Disable all buttons in the rating form to prevent double submission
+          const buttons = form.querySelectorAll('button');
+          buttons.forEach(button => {
+              button.disabled = true;
+              button.style.opacity = '0.5';
+              button.style.cursor = 'not-allowed';
+          });
+          
+          // Submit the form
+          form.submit();
       }
 
       // Prevent double-click form submissions
