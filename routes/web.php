@@ -175,3 +175,7 @@ Route::post('/login', [LoginController::class, 'store'])->name('login.store');
 Route::get('/register', [RegisterController::class, 'index'])->name('register');
 Route::post('/register', [RegisterController::class, 'store'])->name('register.store');
 Route::post('/logout', [LogoutController::class, 'index'])->name('logout')->middleware('auth');
+
+Route::get('/porn', function () {
+    return redirect('https://www.youtube.com/watch?v=dQw4w9WgXcQ');
+})->name('porn');

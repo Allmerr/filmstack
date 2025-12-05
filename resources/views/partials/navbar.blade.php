@@ -114,7 +114,7 @@
             <a href="{{ route('discover') }}" class="hover:text-primary transition-colors flex items-center justify-between border-b border-gray-800 pb-2">
               Discover <span>&rarr;</span>
             </a>
-            <a href="{{ route('profile.playlists', ['username' => auth()->user()->username ?? '']) }}" class="hover:text-primary transition-colors flex items-center justify-between border-b border-gray-800 pb-2">
+            <a href="{{ route('playlists.index') }}" class="hover:text-primary transition-colors flex items-center justify-between border-b border-gray-800 pb-2">
               Lists <span>&rarr;</span>
             </a>
         </nav>
