@@ -194,7 +194,7 @@
                      @foreach ($reviews as $review)
                      <div class="flex gap-4 p-4 rounded-lg bg-[#1f252b] border border-white/5 animate-[fadeIn_0.3s_ease-out]">
                         <div class="flex-shrink-0">
-                           <img src="{{ 'https://i.pravatar.cc/150?img=12'}}" alt="" class="w-10 h-10 rounded-full border border-gray-600">
+                           <img src="{{ $review->user->avatar ? asset('storage/profile/' . $review->user->avatar) : 'https://i.pravatar.cc/150?u=' . $review->user->id }}" alt="{{ $review->user->username }}" class="w-10 h-10 rounded-full border border-gray-600 object-cover">
                         </div>
                         <div class="flex-grow">
                            <div class="flex justify-between items-center mb-1">
