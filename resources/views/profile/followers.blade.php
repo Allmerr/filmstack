@@ -21,7 +21,7 @@
                 <!-- User Info -->
                 <div class="flex-grow text-center md:text-left">
                     <h1 class="text-3xl md:text-4xl font-bold text-white mb-1">{{ $user->username }}</h1>
-                    <p class="text-textMuted text-sm mb-4">Lorem ipsum dolor sit amet consectetur adipisicing elit. Ipsam, veniam optio? Sint, nesciunt pariatur cum tempora neque molestiae quisquam ut quae animi! Dolore incidunt beatae expedita, provident repellat magni fugiat!</p>
+                    <p class="text-textMuted text-sm mb-4">{{ $user->bio ?? 'No bio yet.' }}</p>
 
                     <div class="flex justify-center md:justify-start gap-6 md:gap-10 text-sm">
                         <div class="text-center md:text-left">
@@ -102,7 +102,7 @@
 
     </div>
 
+    @include('profile._edit_profile_modal')
 </div>
 
 @endsection
-@include('profile._edit_profile_modal')
