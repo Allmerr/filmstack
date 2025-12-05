@@ -3,6 +3,7 @@
 
 
 <div class="flex min-h-screen bg-dark fade-in">
+    
               <!-- Sidebar -->
               <aside class="w-64 bg-[#1f252b] border-r border-gray-800 flex flex-col fixed h-full z-40">
                  <div class="p-6 border-b border-gray-800">
@@ -54,7 +55,16 @@
                           Back to Site
                       </a>
                   </header>
-
+                    <div class="mb-6 flex gap-3">
+                        <a href="{{ route('admin.users.export', 'excel') }}" class="px-4 py-2 bg-green-600 hover:bg-green-700 text-white font-bold rounded transition-colors text-sm flex items-center gap-2">
+                            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path></svg>
+                            Export Excel
+                        </a>
+                        <a href="{{ route('admin.users.export', 'pdf') }}" class="px-4 py-2 bg-red-600 hover:bg-red-700 text-white font-bold rounded transition-colors text-sm flex items-center gap-2">
+                            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 21h10a2 2 0 002-2V9.414a1 1 0 00-.293-.707l-5.414-5.414A1 1 0 0012.586 3H7a2 2 0 00-2 2v14a2 2 0 002 2z"></path></svg>
+                            Export PDF
+                        </a>
+                    </div>
                   <!-- Search & Filter -->
                   <form method="GET" action="{{ route('admin.users') }}" class="mb-6 flex gap-3">
                       <input 

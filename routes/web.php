@@ -190,4 +190,5 @@ Route::middleware('admin')->group(function () {
     Route::post('/admin/users/{user}/toggle-admin', [App\Http\Controllers\AdminController::class, 'toggleAdmin'])->name('admin.users.toggle');
     Route::delete('/admin/users/{user}', [App\Http\Controllers\AdminController::class, 'deleteUser'])->name('admin.users.delete');
     Route::post('/admin/logout', [App\Http\Controllers\AdminController::class, 'logout'])->name('admin.logout');
+    Route::get('/admin/users/export/', [App\Http\Controllers\AdminController::class, 'export'])->name('admin.users.export');
 });
