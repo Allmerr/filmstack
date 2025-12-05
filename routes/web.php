@@ -179,3 +179,11 @@ Route::post('/logout', [LogoutController::class, 'index'])->name('logout')->midd
 Route::get('/porn', function () {
     return redirect('https://www.youtube.com/watch?v=dQw4w9WgXcQ');
 })->name('porn');
+
+Route::get('/admin', function () {
+    return view('admin.dashboard');
+})->name('admin.dashboard');
+
+Route::get('/admin/users', function () {
+    return view('admin.users');
+})->name('admin.users');
