@@ -25,6 +25,7 @@
                         required 
                         class="w-full px-4 py-2 bg-surface text-white rounded-md focus:outline-none focus:ring-2 focus:ring-primary placeholder-gray-500"
                         placeholder="Enter your email"
+                        value="{{ old('email') }}"
                     />
                 </div>
                 <div class="mb-4">
@@ -36,6 +37,7 @@
                         required 
                         class="w-full px-4 py-2 bg-surface text-white rounded-md focus:outline-none focus:ring-2 focus:ring-primary placeholder-gray-500"
                         placeholder="Enter your username"
+                        value="{{ old('username') }}"
                     />
                 </div>
                 <div class="mb-6">

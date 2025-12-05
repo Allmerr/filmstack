@@ -28,11 +28,11 @@
           <span class="text-textMuted">Save those you want to see.</span>
         </h1>
         <p className="text-lg md:text-xl text-textMuted mb-8 max-w-2xl mx-auto">
-          The social network for film lovers. Tell your friends what’s good. 
+          The social network for film lovers. Tell your friends what's good. 
         </p>
-        <button class="bg-primary hover:bg-primaryHover text-white font-bold py-3 px-8 rounded text-lg transition-transform transform hover:scale-105 shadow-lg shadow-green-900/50 mt-5">
+        <a href="{{ route('register') }}" class="inline-block bg-primary hover:bg-primaryHover text-white font-bold py-3 px-8 rounded text-lg transition-transform transform hover:scale-105 shadow-lg shadow-green-900/50 mt-5">
           Get Started — It's Free!
-        </button>
+        </a>
       </div>
     </header>
 
@@ -133,14 +133,6 @@
                <br/>
                Made for film lovers, by film lovers.
              </p>
-             <div class="flex justify-center gap-4">
-                <button class="bg-white text-dark font-bold py-2 px-6 rounded hover:bg-gray-200 transition-colors">
-                  App Store
-                </button>
-                <button class="bg-white text-dark font-bold py-2 px-6 rounded hover:bg-gray-200 transition-colors">
-                  Google Play
-                </button>
-             </div>
         </div>
 
       </div>
