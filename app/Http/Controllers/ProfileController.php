@@ -33,7 +33,6 @@ class ProfileController extends Controller
             'user' => $user,
             'reviews' => Review::where('users_id', $user->id)->with('user')->get(),
             'watched' => $watched,
-            'followers' => Follower::where('following_to_users_id', $user->id)->with('user')->get(),
             'liked' => Liked::where('users_id', $user->id)->with('user')->get(),
             'watchlist' => Watchlist::where('users_id', $user->id)->with('user')->get(),
             'playlists' => Playlist::where('users_id', $user->id)->with('filmofplaylists')->get(),
@@ -142,11 +141,35 @@ class ProfileController extends Controller
     public function followers($username)
     {
         $user = \App\Models\User::where('username', $username)->firstOrFail();
+        
+        // Get users who follow this user (followers)
         $followers = Follower::where('following_to_users_id', $user->id)->with('user')->get();
+        
+        // Get users that this user follows (following)
+        $following = Follower::where('users_id', $user->id)->with(['followingUser'])->get();
 
         return view('profile.followers', [
             'user' => $user,
             'followers' => $followers,
+            'following' => $following,
+            'reviews' => Review::where('users_id', $user->id)->with('user')->get(),
+            'watched' => Watched::where('users_id', $user->id)->with('user')->get(),
+            'liked' => Liked::where('users_id', $user->id)->with('user')->get(),
+            'watchlist' => Watchlist::where('users_id', $user->id)->with('user')->get(),
+            'playlists' => Playlist::where('users_id', $user->id)->with('filmofplaylists')->get(),
+        ]);
+    }
+
+    public function following($username)
+    {
+        $user = \App\Models\User::where('username', $username)->firstOrFail();
+        $followers = $user->followers()->get();
+        $following = $user->following()->get();
+
+        return view('profile.following', [
+            'user' => $user,
+            'followers' => $followers,
+            'following' => $following,
             'reviews' => Review::where('users_id', $user->id)->with('user')->get(),
             'watched' => Watched::where('users_id', $user->id)->with('user')->get(),
             'liked' => Liked::where('users_id', $user->id)->with('user')->get(),

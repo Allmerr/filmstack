@@ -81,34 +81,41 @@
     <!-- Content -->
     <div class="max-w-5xl mx-auto px-6 py-8">
 
-        <!-- Example Content Grid -->
-        <div class="grid grid-cols-4 sm:grid-cols-5 md:grid-cols-6 lg:grid-cols-8 gap-2">
-    
-            @if($followers->isEmpty())
-                <div class="col-span-full text-center text-textMuted py-12">
-                    No followers yet.
-                </div>
-            @else
-                @foreach($followers as $follower)
-                <a href="/profile/{{ $follower->user->username }}/watched"
-                   class="group block bg-darker rounded-md p-3 hover:shadow-lg border border-gray-800 transition-colors"
-                   aria-label="{{  ($follower->user->username ?? 'View user') }}">
-                  <div class="flex items-center">
-                    <img
-                      src="{{ 'https://i.pravatar.cc/150?img=12'}}"
-                      alt="{{ $follower->user->username }}"
-                      class="w-14 h-14 rounded-full object-cover border border-white/10"
-                      loading="lazy"
-                    />
-                      <p class="text-white font-semibold text-sm truncate">{{ $follower->user->username ?? 'Unknown' }}</p>
-                  </div>
-                  
-                </a>
-                @endforeach
-            @endif
+        <!-- Sub-navigation: Followers / Following -->
+        <div class="flex gap-6 mb-6 border-b border-gray-800">
+            <a href="{{ route('profile.followers', ['username' => $user->username]) }}" class="py-3 px-4 border-b-2 border-primary text-white font-bold text-sm uppercase tracking-wider transition-colors">
+                Followers <span class="text-xs text-gray-500 ml-1">({{ $followers->count() }})</span>
+            </a>
+            <a href="{{ route('profile.following', ['username' => $user->username]) }}" class="py-3 px-4 border-b-2 border-transparent text-textMuted hover:text-white font-bold text-sm uppercase tracking-wider transition-colors">
+                Following <span class="text-xs text-gray-500 ml-1">({{ $following->count() }})</span>
+            </a>
+        </div>
 
-            <!-- Tambahkan item lain disini -->
-
+        <!-- Followers List -->
+        <div>
+            <h2 class="text-white font-bold text-lg mb-4">People who follow {{ $user->username }}</h2>
+            <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-4">
+                @if($followers->isEmpty())
+                    <div class="col-span-full text-center text-textMuted py-12">
+                        No followers yet.
+                    </div>
+                @else
+                    @foreach($followers as $follower)
+                    <a href="{{ route('profile.watched', ['username' => $follower->user->username]) }}"
+                       class="group block bg-darker rounded-lg p-4 hover:shadow-lg hover:border-primary border border-gray-800 transition-all">
+                        <div class="flex flex-col items-center text-center gap-3">
+                            <img
+                              src="{{ $follower->user->avatar ? asset('storage/profile/' . $follower->user->avatar) : 'https://i.pravatar.cc/150?img=12' }}"
+                              alt="{{ $follower->user->username }}"
+                              class="w-16 h-16 rounded-full object-cover border-2 border-white/10 group-hover:border-primary transition-colors"
+                              loading="lazy"
+                            />
+                            <p class="text-white font-semibold text-sm truncate w-full">{{ $follower->user->username ?? 'Unknown' }}</p>
+                        </div>
+                    </a>
+                    @endforeach
+                @endif
+            </div>
         </div>
 
     </div>
