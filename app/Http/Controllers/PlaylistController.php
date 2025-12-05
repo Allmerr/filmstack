@@ -3,6 +3,8 @@
 namespace App\Http\Controllers;
 
 use App\Models\Playlist;
+use App\Models\FilmOfPlaylist;
+use Illuminate\Support\Facades\Http;
 use Illuminate\Http\Request;
 
 class PlaylistController extends Controller
@@ -73,7 +75,26 @@ class PlaylistController extends Controller
      */
     public function show(Playlist $playlist)
     {
-        //
+        // Load related films
+        $playlist->load('filmofplaylists');
+
+        // Fetch poster_path for each film from TMDB
+        foreach ($playlist->filmofplaylists as $key => $film) {
+            $response = Http::withHeaders([
+                'Authorization' => 'Bearer eyJhbGciOiJIUzI1NiJ9.eyJhdWQiOiI1MjA5MDZjY2I2MjAyMmI1YTRhYTk0NDNmMzIyZTVjOSIsIm5iZiI6MTc2NDQ4NzgyMS4wMTcsInN1YiI6IjY5MmJmMjhkM2ViYWNhZjQ1OTI0ZjAwNyIsInNjb3BlcyI6WyJhcGlfcmVhZCJdLCJ2ZXJzaW9uIjoxfQ.JfScCkisoJ0WsY70j7B-rjrrHGo7vppce7j2CfcwEs8'
+            ])->get("https://api.themoviedb.org/3/movie/{$film->id_films}");
+
+            if ($response->ok()) {
+                $playlist->filmofplaylists[$key]->poster_path = $response->json()['poster_path'] ?? null;
+                $playlist->filmofplaylists[$key]->title = $response->json()['title'] ?? null;
+                $playlist->filmofplaylists[$key]->vote_average = $response->json()['vote_average'] ?? null;
+                $playlist->filmofplaylists[$key]->vote_count = $response->json()['vote_count'] ?? null;
+            }
+        }
+
+        return view('playlists.show', [
+            'playlist' => $playlist,
+        ]);
     }
 
     /**
@@ -93,10 +114,19 @@ class PlaylistController extends Controller
     }
 
     /**
-     * Remove the specified resource from storage.
+     * Remove a film from the playlist.
      */
-    public function destroy(Playlist $playlist)
+    public function removeFilm(Playlist $playlist, $filmId)
     {
-        //
+        if (auth()->id() !== $playlist->users_id) {
+            abort(403, 'Unauthorized');
+        }
+
+        FilmOfPlaylist::where('playlists_id', $playlist->id)
+            ->where('id_films', $filmId)
+            ->where('users_id', auth()->id())
+            ->delete();
+
+        return redirect()->back()->with('success', 'Film removed from playlist.');
     }
 }

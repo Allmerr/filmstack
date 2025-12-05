@@ -80,9 +80,9 @@
 
         <div class="max-w-5xl mx-auto px-6 py-8">
                     
-                  <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+                        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
                     @foreach($playlists as $playlist)
-                         <div class="bg-[#1f252b] rounded-lg p-4 border border-white/5 hover:border-primary transition-all group cursor-pointer">
+                                 <a href="{{ route('playlists.show', $playlist->id) }}" class="bg-[#1f252b] rounded-lg p-4 border border-white/5 hover:border-primary transition-all group cursor-pointer block">
                             <div class="flex -space-x-4 mb-4 h-24 overflow-hidden relative">
                                 @if($playlist->filmofplaylists->count() == 0)
                                    <div class="w-full h-24 bg-gray-800 rounded flex items-center justify-center text-textMuted text-xs">Empty</div>
@@ -93,7 +93,7 @@
                             </div>
                             <h3 class="text-white font-bold text-lg group-hover:text-primary transition-colors">{{ $playlist->name }}</h3>
                             <p class="text-textMuted text-xs uppercase tracking-wider">{{ $playlist->filmofplaylists->count() }} Films</p>
-                         </div>
+                                 </a>
                     @endforeach
 
                   </div>

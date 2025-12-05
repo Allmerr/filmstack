@@ -149,6 +149,8 @@ Route::post('/following', [FollowerController::class, 'following'])->name('follo
 
 Route::post('/playlists', [PlaylistController::class, 'store'])->name('playlists.store')->middleware('auth');
 Route::post('/playlists/add-film', [PlaylistController::class, 'addFilmToPlaylist'])->name('playlists.toggle')->middleware('auth');
+Route::get('/playlists/{playlist}', [PlaylistController::class, 'show'])->name('playlists.show');
+Route::delete('/playlists/{playlist}/films/{filmId}', [PlaylistController::class, 'removeFilm'])->name('playlists.film.remove')->middleware('auth');
 
 Route::get('/profile/{username}/watched', [ProfileController::class, 'watched'])->name('profile.watched');
 Route::get('/profile/{username}/liked', [ProfileController::class, 'liked'])->name('profile.liked');
