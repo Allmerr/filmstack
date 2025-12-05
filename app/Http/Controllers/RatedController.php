@@ -28,14 +28,19 @@ class RatedController extends Controller
      */
     public function store(Request $request)
     {
-        // if the user has already rated this film, do not allow another rating
+        // Validate the rating input
+        $validated = $request->validate([
+            'rating' => 'required|in:1,2,3,4,5',
+            'id_films' => 'required',
+        ]);
 
+        // if the user has already rated this film, update the rating
         $existingRating = Rated::where('users_id', auth()->id())
-            ->where('id_films', $request->input('id_films'))
+            ->where('id_films', $validated['id_films'])
             ->first();
 
         if ($existingRating) {
-            $existingRating->rating = $request->input('rating');
+            $existingRating->rating = $validated['rating'];
             $existingRating->save();
             return redirect()->back()->with('success', 'Film rating updated successfully!');
         }
@@ -43,8 +48,8 @@ class RatedController extends Controller
         // Create a new Rated instance
         $rated = new Rated();
         $rated->users_id = auth()->id();
-        $rated->id_films = $request->input('id_films');
-        $rated->rating = $request->input('rating');
+        $rated->id_films = $validated['id_films'];
+        $rated->rating = $validated['rating'];
         $rated->save();
 
         return redirect()->back()->with('success', 'Film rated successfully!');
