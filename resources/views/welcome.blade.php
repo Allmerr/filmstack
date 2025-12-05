@@ -30,9 +30,16 @@
         <p className="text-lg md:text-xl text-textMuted mb-8 max-w-2xl mx-auto">
           The social network for film lovers. Tell your friends what's good. 
         </p>
+        @guest
         <a href="{{ route('register') }}" class="inline-block bg-primary hover:bg-primaryHover text-white font-bold py-3 px-8 rounded text-lg transition-transform transform hover:scale-105 shadow-lg shadow-green-900/50 mt-5">
           Get Started — It's Free!
         </a>
+        @endguest
+        @auth
+        <a href="{{ route('discover') }}" class="inline-block bg-primary hover:bg-primaryHover text-white font-bold py-3 px-8 rounded text-lg transition-transform transform hover:scale-105 shadow-lg shadow-green-900/50 mt-5">
+          Explore Films
+        </a>
+        @endauth
       </div>
     </header>
 
