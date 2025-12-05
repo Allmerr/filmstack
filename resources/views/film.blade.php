@@ -40,52 +40,52 @@
                 <div class="bg-[#1f252b]/60 backdrop-blur-md border border-white/5 rounded-xl p-4 mb-8 inline-flex flex-col sm:flex-row items-center gap-4 shadow-xl">
                    
                    <!-- Interactive Buttons -->
-                   <div class="flex gap-3">
+                   <div class="flex flex-col sm:flex-row gap-3 w-full">
                      <form action="{{ route('watched.store') }}" method="POST">
                       @csrf
                         <input type="hidden" name="id_films" value="{{ $data['id'] }}">
                         @if($watched->contains('users_id', auth()->id()))
                         <input type="hidden" name="alreadyLiked" value="1">
-                        <button type="submit" class="group flex items-center gap-2 px-4 py-2 rounded-lg bg-[#14181c] border border-white/10 border-green-500/50 bg-green-500/10 transition-all duration-300">
+                        <button type="submit" class="w-full sm:w-auto group flex items-center justify-center gap-2 px-4 py-2 rounded-lg bg-[#14181c] border border-white/10 border-green-500/50 bg-green-500/10 transition-all duration-300">
                         <svg class="w-5 h-5  text-green-500 transition-colors" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"></path><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.477 0 8.268 2.943 9.542 7-1.274 4.057-5.065 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"></path></svg>
                         <span class="font-bold text-sm text-textMuted text-white">Unwatch</span>
                         @else
                         <input type="hidden" name="alreadyLiked" value="0">
-                        <button type="submit" class="group flex items-center gap-2 px-4 py-2 rounded-lg bg-[#14181c] border border-white/10 hover:border-green-500/50 hover:bg-green-500/10 transition-all duration-300">
+                        <button type="submit" class="w-full sm:w-auto group flex items-center justify-center gap-2 px-4 py-2 rounded-lg bg-[#14181c] border border-white/10 hover:border-green-500/50 hover:bg-green-500/10 transition-all duration-300">
                         <svg class="w-5 h-5 text-textMuted group-hover:text-green-500 transition-colors" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"></path><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.477 0 8.268 2.943 9.542 7-1.274 4.057-5.065 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"></path></svg>
                         <span class="font-bold text-sm text-textMuted group-hover:text-white">Watch</span>
                         @endif
                       </button>
                      </form>
 
-                     <form action="{{ route('liked.store') }}" method="POST">
+                     <form action="{{ route('liked.store') }}" method="POST" class="w-full sm:w-auto">
                       @csrf
                         <input type="hidden" name="id_films" value="{{ $data['id'] }}">
                         @if($liked->contains('users_id', auth()->id()))
                         <input type="hidden" name="alreadyLiked" value="1">
-                        <button type="submit" class="group flex items-center gap-2 px-4 py-2 rounded-lg bg-[#14181c] border border-white/10 border-pink-500/50 bg-pink-500/10 transition-all duration-300">
+                        <button type="submit" class="w-full sm:w-auto group flex items-center justify-center gap-2 px-4 py-2 rounded-lg bg-[#14181c] border border-white/10 border-pink-500/50 bg-pink-500/10 transition-all duration-300">
                         <svg class="w-5 h-5 text-pink-500 fill-current transition-colors" viewBox="0 0 20 20"><path d="M3.172 5.172a4 4 0 015.656 0L10 6.343l1.172-1.171a4 4 0 115.656 5.656L10 18.657 3.172 10.828a4 4 0 010-5.656z"/></svg>
                         <span class="font-bold text-sm text-textMuted text-white">Unlike</span>
                         @else
                         <input type="hidden" name="alreadyLiked" value="0">
-                        <button type="submit" class="group flex items-center gap-2 px-4 py-2 rounded-lg bg-[#14181c] border border-white/10 hover:border-pink-500/50 hover:bg-pink-500/10 transition-all duration-300">
+                        <button type="submit" class="w-full sm:w-auto group flex items-center justify-center gap-2 px-4 py-2 rounded-lg bg-[#14181c] border border-white/10 hover:border-pink-500/50 hover:bg-pink-500/10 transition-all duration-300">
                         <svg class="w-5 h-5 text-textMuted group-hover:text-pink-500 transition-colors" fill="currentColor" viewBox="0 0 20 20"><path d="M3.172 5.172a4 4 0 015.656 0L10 6.343l1.172-1.171a4 4 0 115.656 5.656L10 18.657 3.172 10.828a4 4 0 010-5.656z"/></svg>
                         <span class="font-bold text-sm text-textMuted group-hover:text-white">Like</span>
                         @endif
                       </button>
                      </form>
 
-                     <form action="{{ route('watchlist.store') }}" method="POST">
+                     <form action="{{ route('watchlist.store') }}" method="POST" class="w-full sm:w-auto">
                         @csrf
                            <input type="hidden" name="id_films" value="{{ $data['id'] }}">
                            @if($watchlist->contains('users_id', auth()->id()))
                            <input type="hidden" name="alreadyInWatchlist" value="1">
-                           <button type="submit" class="group flex items-center gap-2 px-4 py-2 rounded-lg bg-[#14181c] border border-white/10 border-blue-500/50 bg-blue-500/10 transition-all duration-300">
+                           <button type="submit" class="w-full sm:w-auto group flex items-center justify-center gap-2 px-4 py-2 rounded-lg bg-[#14181c] border border-white/10 border-blue-500/50 bg-blue-500/10 transition-all duration-300">
                            <svg class="w-5 h-5  text-blue-500 transition-colors" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 5v14l7-5 7 5V5a2 2 0 00-2-2H7a2 2 0 00-2 2z"></path></svg>
                            <span class="font-bold text-sm text-textMuted text-white">Remove</span>
                            @else
                            <input type="hidden" name="alreadyInWatchlist" value="0">
-                           <button type="submit" class="group flex items-center gap-2 px-4 py-2 rounded-lg bg-[#14181c] border border-white/10 hover:border-blue-500/50 hover:bg-blue-500/10 transition-all duration-300">
+                           <button type="submit" class="w-full sm:w-auto group flex items-center justify-center gap-2 px-4 py-2 rounded-lg bg-[#14181c] border border-white/10 hover:border-blue-500/50 hover:bg-blue-500/10 transition-all duration-300">
                            <svg class="w-5 h-5 text-textMuted group-hover:text-blue-500 transition-colors" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 5v14l7-5 7 5V5a2 2 0 00-2-2H7a2 2 0 00-2 2z"></path></svg>
                            <span class="font-bold text-sm text-textMuted group-hover:text-white">Watchlist</span>
                            @endif
@@ -93,7 +93,7 @@
                      </form>
                      
                       <!-- ADD TO LIST BUTTON -->
-                      <button onclick="openPlaylistModal('{{ $data['id'] }}')" class="group flex items-center gap-2 px-4 py-2 rounded-lg bg-[#14181c] border border-white/10 hover:border-purple-500/50 hover:bg-purple-500/10 transition-all duration-300">
+                      <button onclick="openPlaylistModal('{{ $data['id'] }}')" class="w-full sm:w-auto group flex items-center justify-center gap-2 px-4 py-2 rounded-lg bg-[#14181c] border border-white/10 hover:border-purple-500/50 hover:bg-purple-500/10 transition-all duration-300">
                          <svg class="w-5 h-5 text-textMuted group-hover:text-purple-500 transition-colors" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"></path></svg>
                          <span class="font-bold text-sm text-textMuted group-hover:text-white">List</span>
                       </button>
@@ -114,14 +114,14 @@
                             $userRating = $rated->firstWhere('users_id', auth()->id())->rating;
                           @endphp
                           @foreach ([1,2,3,4,5] as $i)
-                             @if($i <= $userRating)
-                               <button type="button" onclick="submitRating({{ $i }})" aria-label="Rate {{ $i }} star" class="p-0 m-0 bg-transparent border-0 cursor-pointer">
+                                           @if($i <= $userRating)
+                                              <button type="button" onclick="submitRating({{ $i }})" aria-label="Rate {{ $i }} star" class="p-2 m-0 bg-transparent border-0 cursor-pointer touch-manipulation">
                                   <svg class="w-6 h-6 text-primary fill-current stroke-current transition-all duration-200" viewBox="0 0 24 24" role="img" aria-hidden="true">
                                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11.049 2.927c.3-.921 1.603-.921 1.902 0l1.519 4.674a1 1 0 00.95.69h4.915c.969 0 1.371 1.24.588 1.81l-3.976 2.888a1 1 0 00-.363 1.118l1.518 4.674c.3.922-.755 1.688-1.538 1.118l-3.976-2.888a1 1 0 00-1.176 0l-3.976 2.888c-.783.57-1.838-.197-1.538-1.118l1.518-4.674a1 1 0 00-.363-1.118l-3.976-2.888c-.784-.57-.38-1.81.588-1.81h4.914a1 1 0 00.951-.69l1.519-4.674z" />
                                   </svg>
                                </button>
-                             @else
-                               <button type="button" onclick="submitRating({{ $i }})" aria-label="Rate {{ $i }} star" class="p-0 m-0 bg-transparent border-0 cursor-pointer">
+                                           @else
+                                              <button type="button" onclick="submitRating({{ $i }})" aria-label="Rate {{ $i }} star" class="p-2 m-0 bg-transparent border-0 cursor-pointer touch-manipulation">
                                   <svg class="w-6 h-6 hover:text-primary hover:fill-current fill-transparent stroke-current transition-all duration-200" viewBox="0 0 24 24" role="img" aria-hidden="true">
                                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11.049 2.927c.3-.921 1.603-.921 1.902 0l1.519 4.674a1 1 0 00.95.69h4.915c.969 0 1.371 1.24.588 1.81l-3.976 2.888a1 1 0 00-.363 1.118l1.518 4.674c.3.922-.755 1.688-1.538 1.118l-3.976-2.888a1 1 0 00-1.176 0l-3.976 2.888c-.783.57-1.838-.197-1.538-1.118l1.518-4.674a1 1 0 00-.363-1.118l-3.976-2.888c-.784-.57-.38-1.81.588-1.81h4.914a1 1 0 00.951-.69l1.519-4.674z" />
                                  </svg>
@@ -129,13 +129,13 @@
                               @endif
                            @endforeach
                         @else
-                           @foreach ([1,2,3,4,5] as $i)
-                             <button type="button" onclick="submitRating({{ $i }})" aria-label="Rate {{ $i }} star" class="p-0 m-0 bg-transparent border-0 cursor-pointer">
+                                        @foreach ([1,2,3,4,5] as $i)
+                                           <button type="button" onclick="submitRating({{ $i }})" aria-label="Rate {{ $i }} star" class="p-2 m-0 bg-transparent border-0 cursor-pointer touch-manipulation">
                                 <svg class="w-6 h-6 hover:text-primary hover:fill-current fill-transparent stroke-current transition-all duration-200" viewBox="0 0 24 24" role="img" aria-hidden="true">
                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11.049 2.927c.3-.921 1.603-.921 1.902 0l1.519 4.674a1 1 0 00.95.69h4.915c.969 0 1.371 1.24.588 1.81l-3.976 2.888a1 1 0 00-.363 1.118l1.518 4.674c.3.922-.755 1.688-1.538 1.118l-3.976-2.888a1 1 0 00-1.176 0l-3.976 2.888c-.783.57-1.838-.197-1.538-1.118l1.518-4.674a1 1 0 00-.363-1.118l-3.976-2.888c-.784-.57-.38-1.81.588-1.81h4.914a1 1 0 00.951-.69l1.519-4.674z" />
                                 </svg>
                              </button>
-                           @endforeach
+                                        @endforeach
                         @endif 
                       </div>
                    </div>
